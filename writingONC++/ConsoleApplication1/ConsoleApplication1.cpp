@@ -211,12 +211,14 @@ using namespace std;
 //    
 //};
 int main() {
-    heap_array_pointers();
+    //heap_array_pointers();
 
     //const_with_pointers();
 
-    //stack_array_pointers();
-
+    //stack_array_pointers()
+    
+    
+    ;
     return 0;
 }
 
