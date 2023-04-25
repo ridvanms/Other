@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task3",
+      "appliesTo": "TaskWithC++/task3.cpp",
+      "type": "launch"
+    }
+  ]
+}
