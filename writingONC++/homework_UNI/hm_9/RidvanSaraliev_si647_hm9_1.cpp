@@ -67,27 +67,27 @@ int main()
     cout << "----------Array----------" << endl;
     circle circles[4] =
         {
-            {5.5},
-            {2.5},
             {4.5},
-            {3.5}};
-    for (circle element : circles)
+            {1.5},
+            {1.3},
+            {3.1}};
+    for (circle el : circles)
     {
-        cout << element.toString() << endl;
-        cout << "Circle area is " << element.area() << endl;
-        cout << "Circle perimeter is " << element.perim() << endl;
+        cout << el.toString() << endl;
+        cout << "Circle area is " << el.area() << endl;
+        cout << "Circle perimeter is " << el.perim() << endl;
         cout << "*************************" << endl;
     }
-    for (circle &element : circles)
+    for (circle &el : circles)
     {
-        element.set_radius(element.get_radius() + 1);
+        el.set_radius(el.get_radius() + 1);
     }
     cout << "----------Array----------" << endl;
-    for (circle element : circles)
+    for (circle el : circles)
     {
-        cout << element.toString() << endl;
-        cout << "Circle area is " << element.area() << endl;
-        cout << "Circle perimeter is " << element.perim() << endl;
+        cout << el.toString() << endl;
+        cout << "Circle area is " << el.area() << endl;
+        cout << "Circle perimeter is " << el.perim() << endl;
         cout << "*************************" << endl;
     }
     circle *circles2 = new circle[4]{
