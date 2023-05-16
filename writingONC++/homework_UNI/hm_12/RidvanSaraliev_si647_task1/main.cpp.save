@@ -1,0 +1,23 @@
+#include <iostream>.
+#include <cstring>
+
+template<typename T>
+class Account
+{
+    T id;
+public:
+    Account() = default;
+    Account(T _id):id(_id){};
+    T getId()
+    {
+        return id;
+    }
+};
+
+int main(){
+    
+    Account<int>acc1(1231230);
+    Account<
+
+    return EXIT_SUCCESS;
+}
