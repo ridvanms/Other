@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive 3D Parallax Website</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <header>
+    <nav>
+      <img class="logo" src="./img/logo.png" alt="background">
+      <ul>
+        <li>
+          <a href="#">Signin</a>
+        </li>
+        <li>
+          <a href="#">Sign up</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+        </li>
+        <li class="hamburger">
+          <a href="#">
+            <div class="bar"></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="vignette"></div>
+    <img src="img/background.png"data-distance="-200" data-speedx="0.3" data-speedy="0.38" class="parallax bg-img" alt="">
+    <img src="img/fog_7.png"data-distance="300" data-speedx="0.27" data-speedy="0.32" class="parallax fog-7" alt="">
+    <img src="img/mountain_10.png"data-distance="500" data-speedx="0.195" data-speedy="0.305" class="parallax mountain-10" alt="">
+    <img src="img/fog_6.png"data-distance="600" data-speedx="0.25" data-speedy="0.28" class="parallax fog-6" alt="">
+    <img src="img/mountain_9.png"data-distance="800" data-speedx="0.125" data-speedy="0.155" class="parallax mountain-9" alt="">
+    <img src="img/mountain_8.png"data-distance="1000" data-speedx="0.1" data-speedy="0.11" class="parallax mountain-8" alt="">
+    <img src="img/fog_5.png"data-distance="1200" data-speedx="0.16" data-speedy="0.105" class="parallax fog-5" alt="">
+    <img src="img/mountain_7.png"data-distance="1300" data-speedx="0.1" data-speedy="0.1" class="parallax mountain-7" alt="">
+    <div class="text parallax" data-speedx="0.07" data-speedy="0.07" >
+      <h2>China</h2>
+      <h1>Plantopia</h1>
+    </div>
+    <img src="img/mountain_6.png"data-distance="1500" data-speedx="0.065" data-speedy="0.05" class="parallax mountain-6" alt="">
+    <img src="img/fog_4.png"data-distance="1560" data-speedx="0.135" data-speedy="0.018" class="parallax fog-4" alt="">
+    <img src="img/mountain_5.png"data-distance="1600" data-speedx="0.08" data-speedy="0.024" class="parallax mountain-5" alt="">
+    <img src="img/fog_3.png"data-distance="1700" data-speedx="0.11" data-speedy="0.018" class="parallax fog-3" alt="">
+    <img src="img/mountain_4.png"data-distance="1800" data-speedx="0.059" data-speedy="0.0115" class="parallax mountain-4" alt="">
+    <img src="img/mountain_3.png"data-distance="1900" data-speedx="0.04" data-speedy="0.013" class="parallax mountain-3" alt="">
+    <img src="img/fog_2.png"data-distance="2000" data-speedx="0.15" data-speedy="0.012" class="parallax fog-2" alt="">
+    <img src="img/mountain_2.png"data-distance="2100" data-speedx="0.0235" data-speedy="0.018" class="parallax mountain-2" alt="">
+    <img src="img/mountain_1.png"data-distance="2200" data-speedx="0.027" data-speedy="0.012" class="parallax mountain-1" alt="">
+    <img src="img/sun_rays.png" class="parallax sun-rays hide" alt="">
+    <img src="img/black_shadow.png" class="parallax black-shadow hide" alt="">
+    <img src="img/fog_1.png"data-distance="2500" data-speedx="0.12" data-speedy="0.01" class="parallax fog-1 hide" alt="">
+
+  </main>
+
+  
+  <!-- NOTE GSAP Animation ⬇️ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations.min.js"
+    integrity="sha512-oAY57i8MXmaOP7pAylNLnULAM4QLV3uGnvnXVY4zF229/zFzTvG2/5YIgH8iN8oZR2hnbkiDPd4JCJGaH4oG6g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/gsap.min.js"></script>
+  <!-- -------- -->
+  <script src="js/app.js" defer></script>
+</body>
+
+</html>
