@@ -1,8 +1,8 @@
 public class HW9_RidvanSaraliev_si647 {
     enum Coffee {
-        ESPRESSO("Еспресо", 2.50),
-        LATTE("Лате", 3.00),
-        CAPUPUCCINO("Капучино", 2.80);
+        ESPRESSO("Espresso", 2.50),
+        LATE("Late", 3.00),
+        CAPUCHINO("Capuchino", 2.80);
 
         private String name;
         private double price;
@@ -31,9 +31,9 @@ public class HW9_RidvanSaraliev_si647 {
     }
 
     enum Sandwich {
-        BLT("БЛТ", 3.50),
-        TUNA("Tuna", 4.00),
-        CHICKEN("Chicken", 4.50);
+        BLT("BLT", 1.50),
+        TURKEY("Turkey", 2.00),
+        CHICKEN("Chicken", 2.50);
 
         private String name;
         private double price;
@@ -74,12 +74,12 @@ public class HW9_RidvanSaraliev_si647 {
             return coffee;
         }
 
-        public void setCoffee(Coffee coffee) {
-            this.coffee = coffee;
-        }
-
         public Sandwich getSandwich() {
             return sandwich;
+        }
+
+        public void setCoffee(Coffee coffee) {
+            this.coffee = coffee;
         }
 
         public void setSandwich(Sandwich sandwich) {
@@ -97,15 +97,17 @@ public class HW9_RidvanSaraliev_si647 {
     }
 
     public static void main(String[] args) {
+        // Create the menu items
         Order[] orders = new Order[3];
-        orders[0] = new Order(Coffee.ESPRESSO, Sandwich.BLT);
-        orders[1] = new Order(Coffee.CAPUPUCCINO, Sandwich.CHICKEN);
-        orders[2] = new Order(Coffee.LATTE, Sandwich.TUNA);
-
+        orders[0] = new Order(Coffee.CAPUCHINO, Sandwich.BLT);
+        orders[1] = new Order(Coffee.ESPRESSO, Sandwich.CHICKEN);
+        orders[2] = new Order(Coffee.LATE, Sandwich.TURKEY);
+        
         for (Order order : orders) {
             System.out.println(order.toString());
             System.out.println("Price: " + order.getPrice());
-            System.out.println();
+            System.out.println("\n");
+
         }
     }
 }
