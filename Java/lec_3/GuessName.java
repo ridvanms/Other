@@ -1,4 +1,3 @@
-package lect3;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,15 +6,16 @@ import java.util.Scanner;
 public class GuessName {
 
 	public static void main(String[] args) throws IOException {
+		Scanner sc = new Scanner(System.in);
+		
 		String fname; //файл, съдържащ името за познаване
-		Scanner  sc= new Scanner(System.in);
-		System.out.print("File with the name ");
+		System.out.print("File with the name : ");
 		fname= sc.next();
 		
-		File f= new File(fname);
+		File f = new File(fname);
 		
 		if( !f.exists()) {
-			System.err.println(fname+ " не е намерен");
+			System.err.println(fname + "Is not found!");
 			System.exit(1);
 		}
 		
@@ -23,7 +23,7 @@ public class GuessName {
 		String name= sf.next(); //Прочитане на името от файла
 		
 		//gname - познаваното име, запълваме го със *
-		StringBuffer gname=new StringBuffer(name);
+		StringBuffer gname = new StringBuffer(name);
 		for(int i=0; i<gname.length(); i++) {
 	      gname.setCharAt(i, '*');
 		}
