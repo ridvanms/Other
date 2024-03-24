@@ -15,7 +15,7 @@ public class HW3_RidvanSaraliev_si647 {
     } else {
       System.out.println(nameTwo + " is longer!");
     }
-
+    
     
     System.out.println("Divide two numbers: ");
     

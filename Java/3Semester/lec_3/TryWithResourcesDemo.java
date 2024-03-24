@@ -1,4 +1,3 @@
-package lect3;
 
 import java.io.File;
 import java.io.FileWriter;

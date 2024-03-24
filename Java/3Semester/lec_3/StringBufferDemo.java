@@ -1,4 +1,3 @@
-package lect3;
 
 public class StringBufferDemo {
 
