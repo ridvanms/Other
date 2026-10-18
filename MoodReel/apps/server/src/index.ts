@@ -10,7 +10,7 @@ const store = await JsonFileStore.open(config.dataDir, logger);
 const app = createApp({ store, logger, webDist: config.webDist, trustProxy: config.trustProxy });
 
 const server = app.listen(config.port, config.host, () => {
-  logger.info(`MoodReel API слуша на http://localhost:${config.port}`, { env: config.env });
+  logger.info(`MoodReel API listening on http://localhost:${config.port}`, { env: config.env });
 });
 
 let shuttingDown = false;

@@ -17,13 +17,13 @@ async function request<T>(path: string, init: RequestInit & { json?: unknown } =
     });
     if (!res.ok) {
       const body = (await res.json().catch(() => null)) as ApiErrorBody | null;
-      throw new ApiError(body?.message ?? `Сървърът върна грешка ${res.status}.`, res.status, body?.error ?? 'http_error');
+      throw new ApiError(body?.message ?? `The server returned error ${res.status}.`, res.status, body?.error ?? 'http_error');
     }
     return (await res.json()) as T;
   } catch (error) {
     if (error instanceof ApiError) throw error;
     if ((error as Error).name === 'AbortError' && init.signal?.aborted) throw error;
-    throw new ApiError('Няма връзка със сървъра.', 0, 'network');
+    throw new ApiError('Cannot reach the server.', 0, 'network');
   } finally {
     clearTimeout(timeout);
   }

@@ -26,7 +26,7 @@ export function createLocalApi(): Api {
     movies: async () => SUMMARIES,
     movie: async (id) => {
       const movie = byId.get(id);
-      if (!movie) throw new ApiError('Няма такъв филм в каталога.', 404, 'movie_not_found');
+      if (!movie) throw new ApiError('That film is not in the catalog.', 404, 'movie_not_found');
       return { movie, similar: similarMovies(movie, SUMMARIES, 6).map((s) => ({ movie: s.ref, similarity: Math.round(s.similarity * 100) })) };
     },
     parse: async (text) => parser.parse(text.slice(0, 400)),
@@ -36,13 +36,13 @@ export function createLocalApi(): Api {
       const { results, pool } = recommend(SUMMARIES, query, { limit: 8, seed });
       const rng = createRng(seed);
       const pick = pickOne(results, rng);
-      if (!pick) throw new ApiError('Условията изключиха всички филми. Махни някое ограничение.', 404, 'nothing_left');
+      if (!pick) throw new ApiError('Your rules filtered out every film. Remove one and try again.', 404, 'nothing_left');
       const remaining = SUMMARIES.filter((m) => !pool.excluded[m.id]);
       return { pick, reel: buildReel(pick.movie, remaining.length > 1 ? remaining : SUMMARIES, rng), seed, alternatives: results.filter((r) => r.movie.id !== pick.movie.id).slice(0, 3) };
     },
     oracle: async (history, query) => {
       const pool = query ? SUMMARIES.filter((m) => !exclusionReason(m, query)) : SUMMARIES;
-      if (pool.length === 0) throw new ApiError('Условията изключиха всички филми. Махни някое ограничение.', 404, 'nothing_left');
+      if (pool.length === 0) throw new ApiError('Your rules filtered out every film. Remove one and try again.', 404, 'nothing_left');
       return runOracle(pool, history);
     },
     feedback: async () => {},

@@ -21,7 +21,7 @@ export function createLogger(options: { json: boolean; level?: Level; silent?: b
       stream.write(`${JSON.stringify({ time: new Date().toISOString(), level, msg, ...data })}\n`);
     } else {
       const extra = data && Object.keys(data).length ? ` ${JSON.stringify(data)}` : '';
-      stream.write(`${new Date().toLocaleTimeString('bg-BG')} ${level.toUpperCase().padEnd(5)} ${msg}${extra}\n`);
+      stream.write(`${new Date().toLocaleTimeString('en-GB')} ${level.toUpperCase().padEnd(5)} ${msg}${extra}\n`);
     }
   };
   return {

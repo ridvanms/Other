@@ -13,11 +13,11 @@ export function Fingerprint({ movie, query, compact = false }: { movie: MovieSum
   return (
     <figure className={`print ${compact ? 'print--compact' : ''}`}>
       <figcaption className="print__caption">
-        <span className="eyebrow">Отпечатък на настроението · 0–10</span>
+        <span className="eyebrow">Mood fingerprint · 0–10</span>
         {hasWishes && (
           <span className="print__legend">
-            <span className="print__key print__key--film" aria-hidden="true" /> филмът
-            <span className="print__key print__key--wish" aria-hidden="true" /> твоето желание
+            <span className="print__key print__key--film" aria-hidden="true" /> the film
+            <span className="print__key print__key--wish" aria-hidden="true" /> your wish
           </span>
         )}
       </figcaption>
@@ -28,7 +28,7 @@ export function Fingerprint({ movie, query, compact = false }: { movie: MovieSum
             const wish = wishes[dim];
             const lo = wish ? Math.max(0, wish.min ?? wish.target - (wish.tolerance ?? 1)) : 0;
             const hi = wish ? Math.min(10, wish.max ?? wish.target + (wish.tolerance ?? 1)) : 0;
-            const wishText = wish ? `искаш ${fmt(lo)}–${fmt(hi)}` : '';
+            const wishText = wish ? `you want ${fmt(lo)}–${fmt(hi)}` : '';
             return (
               <tr key={dim} title={`${DIM_META[dim].label}: ${value}/10${wish ? ` · ${wishText}` : ''}`}>
                 <th scope="row">{DIM_META[dim].short}</th>
@@ -53,5 +53,5 @@ export function Fingerprint({ movie, query, compact = false }: { movie: MovieSum
 }
 
 function fmt(n: number): string {
-  return Number.isInteger(n) ? String(n) : n.toFixed(1).replace('.', ',');
+  return Number.isInteger(n) ? String(n) : n.toFixed(1);
 }

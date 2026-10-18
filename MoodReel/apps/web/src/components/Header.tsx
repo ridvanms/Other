@@ -6,9 +6,9 @@ export type View = 'mood' | 'oracle' | 'list';
 
 export function Header({ view, onView, saved, mode }: { view: View; onView: (v: View) => void; saved: number; mode: Api['mode'] }) {
   const items: Array<{ id: View; label: string }> = [
-    { id: 'mood', label: 'Настроение' },
-    { id: 'oracle', label: 'Оракул' },
-    { id: 'list', label: 'Моят списък' },
+    { id: 'mood', label: 'Mood' },
+    { id: 'oracle', label: 'Oracle' },
+    { id: 'list', label: 'My list' },
   ];
   return (
     <header className="topbar">
@@ -19,7 +19,7 @@ export function Header({ view, onView, saved, mode }: { view: View; onView: (v: 
             Mood<span>Reel</span>
           </span>
         </a>
-        <nav className="topbar__nav" aria-label="Основна навигация">
+        <nav className="topbar__nav" aria-label="Main navigation">
           {items.map((item) => (
             <button key={item.id} type="button" className={`topbar__link ${view === item.id ? 'is-on' : ''}`} aria-current={view === item.id ? 'page' : undefined} onClick={() => onView(item.id)}>
               {item.label}
@@ -28,8 +28,8 @@ export function Header({ view, onView, saved, mode }: { view: View; onView: (v: 
           ))}
         </nav>
         {mode === 'local' && (
-          <span className="topbar__mode" title="Двигателят работи изцяло в браузъра ти">
-            офлайн режим
+          <span className="topbar__mode" title="The engine runs entirely in your browser">
+            offline mode
           </span>
         )}
       </div>

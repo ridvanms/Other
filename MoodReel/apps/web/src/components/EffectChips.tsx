@@ -17,7 +17,7 @@ export function EffectChips() {
       await navigator.clipboard.writeText(url);
       setCopied('ok');
     } catch {
-      window.prompt('Копирай връзката:', url);
+      window.prompt('Copy the link:', url);
       setCopied('manual');
     }
     setTimeout(() => setCopied(null), 2200);
@@ -27,23 +27,23 @@ export function EffectChips() {
     <section className="wishes" aria-labelledby="wishes-title">
       <div className="wishes__head">
         <h2 id="wishes-title" className="eyebrow">
-          Активни желания {chips.length > 0 && <span className="wishes__count">{chips.length}</span>}
+          Your wishes {chips.length > 0 && <span className="wishes__count">{chips.length}</span>}
         </h2>
         {chips.length > 0 && (
           <div className="wishes__actions">
             {import.meta.env.VITE_SHARE !== 'off' && (
               <button type="button" className="btn btn--ghost btn--small" onClick={share}>
-                {copied === 'ok' ? 'Връзката е копирана' : 'Сподели настроението'}
+                {copied === 'ok' ? 'Link copied' : 'Share this mood'}
               </button>
             )}
             <button type="button" className="btn btn--ghost btn--small" onClick={() => dispatch({ type: 'clear' })}>
-              Изчисти
+              Clear
             </button>
           </div>
         )}
       </div>
       {chips.length === 0 ? (
-        <p className="wishes__empty">Няма условия – виждаш целия каталог. Напиши нещо горе или мръдни някой плъзгач.</p>
+        <p className="wishes__empty">No wishes yet, so you are looking at the whole catalog. Type something above or move a slider.</p>
       ) : (
         <ul className="wishes__list">
           <AnimatePresence initial={false}>
@@ -60,7 +60,7 @@ export function EffectChips() {
               >
                 <span className="wish__group">{chip.group}</span>
                 <span className="wish__label">{chip.label}</span>
-                <button type="button" className="wish__remove" aria-label={`Махни „${chip.label}“`} onClick={() => dispatch({ type: 'remove', keys: chip.keys })}>
+                <button type="button" className="wish__remove" aria-label={`Remove “${chip.label}”`} onClick={() => dispatch({ type: 'remove', keys: chip.keys })}>
                   ×
                 </button>
               </motion.li>

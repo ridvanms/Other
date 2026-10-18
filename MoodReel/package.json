@@ -2,7 +2,7 @@
   "name": "moodreel",
   "private": true,
   "version": "1.0.0",
-  "description": "MoodReel — избери филм според настроението си.",
+  "description": "MoodReel – pick a film by how you feel.",
   "type": "module",
   "workspaces": [
     "packages/*",

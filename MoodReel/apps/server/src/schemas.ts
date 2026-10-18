@@ -2,7 +2,7 @@ import { DIMS, GENRES } from '@moodreel/core';
 import { z } from 'zod';
 
 const score = z.number().min(0).max(10);
-const movieId = z.string().regex(/^[a-z0-9-]{2,80}$/, 'Невалиден идентификатор на филм');
+const movieId = z.string().regex(/^[a-z0-9-]{2,80}$/, 'Invalid film id');
 
 const dimConstraint = z.object({
   target: score,
@@ -42,7 +42,7 @@ export const moodQuerySchema = z.object({
 });
 
 export const parseRequest = z.object({
-  text: z.string().trim().min(1, 'Напиши какво ти се гледа').max(400, 'Опитай по-кратко – до 400 знака'),
+  text: z.string().trim().min(1, 'Tell me what you feel like watching').max(400, 'Keep it under 400 characters'),
 });
 
 export const recommendRequest = z.object({

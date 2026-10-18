@@ -11,7 +11,7 @@ interface Props {
 
 /**
  * The whole catalog as frames on a strip of film. Rules switch frames off
- * one by one, so you can watch "без тъжен край" thin the field without
+ * one by one, so you can watch "no sad ending" thin the field without
  * learning which endings are sad.
  */
 export function ContactSheet({ pool, highlighted, onOpen }: Props) {
@@ -27,15 +27,15 @@ export function ContactSheet({ pool, highlighted, onOpen }: Props) {
       <div className="sheet__head">
         <div>
           <p className="eyebrow" id="sheet-title">
-            Контактен лист · {frames[0]?.year}–{frames[frames.length - 1]?.year}
+            Contact sheet · {frames[0]?.year}–{frames[frames.length - 1]?.year}
           </p>
           <p className="sheet__count" aria-live="polite">
             <span className="sheet__remaining">{remaining}</span>
-            <span className="sheet__total"> от {total} филма остават</span>
+            <span className="sheet__total"> of {total} films remain</span>
           </p>
         </div>
         {reasons.length > 0 && (
-          <ul className="sheet__reasons" aria-label="Защо са изключени">
+          <ul className="sheet__reasons" aria-label="Why films are excluded">
             {reasons.map(([reason, count]) => (
               <li key={reason}>
                 <button
@@ -59,7 +59,7 @@ export function ContactSheet({ pool, highlighted, onOpen }: Props) {
             <span
               key={movie.id}
               className={classes}
-              title={reason ? `${movie.title} – изключен: ${EXCLUSION_LABEL[reason]}` : movie.title}
+              title={reason ? `${movie.title} – excluded: ${EXCLUSION_LABEL[reason]}` : movie.title}
               style={{ '--a': movie.palette[1], '--b': movie.palette[0], '--i': i % 24 } as CSSProperties}
               onClick={() => onOpen(movie.id)}
             />

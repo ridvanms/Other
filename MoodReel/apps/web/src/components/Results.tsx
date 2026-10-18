@@ -26,15 +26,15 @@ export function Results({ data, loading, error, onOpen, onPick }: Props) {
     <section className="results" aria-labelledby="results-title" aria-busy={loading}>
       <div className="results__head">
         <div>
-          <p className="eyebrow">Екран</p>
-          <h2 id="results-title">{data?.ranked === false ? 'Всичко, което минава условията ти' : 'Какво пасва на настроението ти'}</h2>
+          <p className="eyebrow">Screen</p>
+          <h2 id="results-title">{data?.ranked === false ? 'Everything that passes your rules' : 'What fits your mood'}</h2>
         </div>
         <div className="results__actions">
-          <button type="button" className="btn btn--ghost" onClick={() => dispatch({ type: 'shuffle' })} title="Друг ред при равни съвпадения">
-            <Icon name="shuffle" size={16} /> Разбъркай
+          <button type="button" className="btn btn--ghost" onClick={() => dispatch({ type: 'shuffle' })} title="Reorder equally good matches">
+            <Icon name="shuffle" size={16} /> Shuffle
           </button>
           <button type="button" className="btn btn--primary" onClick={onPick} disabled={!all.length}>
-            <Icon name="reel" size={16} /> Избери ми филм
+            <Icon name="reel" size={16} /> Pick a film for me
           </button>
         </div>
       </div>
@@ -47,8 +47,8 @@ export function Results({ data, loading, error, onOpen, onPick }: Props) {
 
       {!error && data && results.length === 0 && (
         <div className="results__empty">
-          <h3>Условията изключиха всичко</h3>
-          <p>Махни някое ограничение от „Активни желания“ или в раздел „Условия“ и лентата пак ще се напълни.</p>
+          <h3>Your rules ruled out everything</h3>
+          <p>Remove a wish above or switch off a rule in the “Rules” tab and the reel will fill up again.</p>
         </div>
       )}
 
@@ -60,7 +60,7 @@ export function Results({ data, loading, error, onOpen, onPick }: Props) {
         </AnimatePresence>
         {weak.length > 0 && (
           <>
-            <p className="results__divider eyebrow">По-далечни предложения</p>
+            <p className="results__divider eyebrow">Further suggestions</p>
             {weak.map((rec, i) => (
               <FilmCard key={rec.movie.id} rec={rec} rank={strong.length + i} ranked={Boolean(data?.ranked)} onOpen={onOpen} />
             ))}
@@ -69,7 +69,7 @@ export function Results({ data, loading, error, onOpen, onPick }: Props) {
       </div>
       {all.length > results.length && (
         <button type="button" className="btn results__more" onClick={() => setExpanded(true)}>
-          Покажи още {all.length - results.length}
+          Show {all.length - results.length} more
         </button>
       )}
     </section>

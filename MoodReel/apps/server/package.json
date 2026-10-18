@@ -2,7 +2,7 @@
   "name": "@moodreel/server",
   "version": "1.0.0",
   "private": true,
-  "description": "REST API на MoodReel: препоръки, парсване на текст, оракул и общностна статистика.",
+  "description": "MoodReel REST API: recommendations, text parsing, the oracle and community stats.",
   "type": "module",
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/index.ts",

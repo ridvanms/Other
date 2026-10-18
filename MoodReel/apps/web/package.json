@@ -2,7 +2,7 @@
   "name": "@moodreel/web",
   "version": "1.0.0",
   "private": true,
-  "description": "Уеб клиентът на MoodReel.",
+  "description": "The MoodReel web client.",
   "type": "module",
   "scripts": {
     "dev": "vite",

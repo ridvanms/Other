@@ -23,11 +23,13 @@ const CYRILLIC = /[Ѐ-ӿ]/;
  * words, so only long Latin titles, multi-word aliases and article-marked
  * Bulgarian titles ("Матрицата") are recognised without a "like …" cue.
  */
-/** Titles that double as everyday phrases ("сам вкъщи съм" is not a film request). */
+/** Titles that double as everyday phrases ("I'm home alone tonight" is not a film request). */
 const EVERYDAY_PHRASES = new Set([
+  'home alone', 'the thing', 'about time', 'get out', 'inside out', 'life is beautiful', 'into the wild', 'your name', 'it follows', 'the father',
+  'the lesson', 'the others', 'others', 'searching', 'prisoners', 'gravity', 'arrival', 'parasite', 'scream', 'psycho', 'martian', 'prestige',
+  'predestination', 'primer', 'coherence', 'the notebook', 'cast away', 'the hangover', 'glory',
   'сам вкъщи', 'тихо място', 'въпрос на време', 'в небето', 'отвътре навън', 'нож в гърба', 'светът е голям',
   'сред дивата природа', 'стая', 'урок', 'слава', 'бащата', 'луна', 'враг', 'тя', 'ние', 'седем', 'писък',
-  'others', 'searching', 'prisoners', 'gravity', 'arrival', 'parasite',
 ]);
 
 function isScannable(text: string): boolean {
@@ -92,7 +94,7 @@ export class TitleIndex {
   }
 
   /**
-   * "black swan например" → tries "black swan например", "black swan", "black".
+   * "black swan maybe" → tries "black swan maybe", "black swan", "black".
    * Picks the longest prefix that still matches, so trailing chatter is ignored.
    */
   matchPrefix(phrase: string, threshold = 0.72): (TitleMatch & { words: number }) | null {
@@ -109,7 +111,8 @@ export class TitleIndex {
 
 function scorePair(query: string, title: string): number {
   if (query === title) return 1;
-  if (title.startsWith(`${query} `) && query.length >= 4) return 0.82 + 0.15 * (query.length / title.length);
+  // "spirited" → "spirited away", but not "dark" → "dark knight": the prefix has to carry most of the title.
+  if (title.startsWith(`${query} `) && query.length >= 6 && query.length / title.length >= 0.4) return 0.82 + 0.15 * (query.length / title.length);
   return dice(query, title);
 }
 

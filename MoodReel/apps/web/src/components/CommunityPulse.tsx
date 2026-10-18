@@ -26,16 +26,16 @@ export function CommunityPulse({ refreshKey, onOpen }: { refreshKey: number; onO
   return (
     <section className="pulse panel" aria-labelledby="pulse-title">
       <div className="pulse__intro">
-        <p className="eyebrow">Пулс</p>
-        <h2 id="pulse-title">Тази седмица в MoodReel</h2>
+        <p className="eyebrow">Pulse</p>
+        <h2 id="pulse-title">This week on MoodReel</h2>
         <p className="pulse__figure">{stats.weekPicks}</p>
-        <p className="pulse__caption">{stats.weekPicks === 1 ? 'избран филм за последните 7 дни' : 'избрани филма за последните 7 дни'}</p>
+        <p className="pulse__caption">{stats.weekPicks === 1 ? 'film picked in the last 7 days' : 'films picked in the last 7 days'}</p>
       </div>
 
       <div className="pulse__block">
-        <p className="eyebrow">Най-избирани</p>
+        <p className="eyebrow">Most picked</p>
         {stats.topWeek.length === 0 ? (
-          <p className="pulse__empty">Още никой не е натиснал „Гледам го!“ тази седмица. Твоят избор ще е първият.</p>
+          <p className="pulse__empty">Nobody has pressed “I’ll watch it!” this week yet. Yours could be the first.</p>
         ) : (
           <ol className="pulse__top">
             {stats.topWeek.map(({ movie, picks }) => (
@@ -51,9 +51,9 @@ export function CommunityPulse({ refreshKey, onOpen }: { refreshKey: number; onO
       </div>
 
       <figure className="pulse__block pulse__mood">
-        <figcaption className="eyebrow">Какво търсят хората спрямо средата (5)</figcaption>
+        <figcaption className="eyebrow">What people want, compared with the midpoint (5)</figcaption>
         {!mood ? (
-          <p className="pulse__empty">Трябват още няколко избора, за да има смислена средна стойност.</p>
+          <p className="pulse__empty">A few more picks are needed for a meaningful average.</p>
         ) : (
           <table className="pulse__table">
             <tbody>
@@ -78,7 +78,7 @@ export function CommunityPulse({ refreshKey, onOpen }: { refreshKey: number; onO
             </tbody>
           </table>
         )}
-        {mood && <p className="pulse__legend">наляво – по-малко от средното · надясно – повече · от {stats.moodSamples} избора</p>}
+        {mood && <p className="pulse__legend">left – less than the midpoint · right – more · from {stats.moodSamples} picks</p>}
       </figure>
     </section>
   );

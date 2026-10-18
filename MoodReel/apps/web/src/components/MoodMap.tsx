@@ -13,9 +13,9 @@ const intensity = (m: MovieSummary) => (0.45 * m.profile.tension + 0.3 * m.profi
 const darkness = (m: MovieSummary) => (0.55 * m.profile.darkness + 0.25 * m.profile.sadness + 0.2 * m.profile.fear) / 10;
 
 function label(x: number, y: number): string {
-  const xl = x < 0.36 ? 'спокойно' : x > 0.64 ? 'интензивно' : 'балансирано';
-  const yl = y < 0.36 ? 'светло' : y > 0.64 ? 'мрачно' : 'нито светло, нито мрачно';
-  return `${PAD_GROUP_PREFIX}${xl} и ${yl}`;
+  const xl = x < 0.36 ? 'calm' : x > 0.64 ? 'intense' : 'balanced';
+  const yl = y < 0.36 ? 'bright' : y > 0.64 ? 'dark' : 'neither bright nor dark';
+  return `${PAD_GROUP_PREFIX}${xl} and ${yl}`;
 }
 
 export function padEffects(x: number, y: number): Effect[] {
@@ -102,7 +102,7 @@ export function MoodMap({ highlighted, excluded, onOpen }: Props) {
     commit(next, true);
   };
 
-  const describe = puck ? label(puck.x, puck.y).slice(PAD_GROUP_PREFIX.length) : 'не е зададено';
+  const describe = puck ? label(puck.x, puck.y).slice(PAD_GROUP_PREFIX.length) : 'not set';
 
   return (
     <div className="moodmap">
@@ -114,10 +114,10 @@ export function MoodMap({ highlighted, excluded, onOpen }: Props) {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
       >
-        <span className="moodmap__quad moodmap__quad--tl">Уютно</span>
-        <span className="moodmap__quad moodmap__quad--tr">Адреналин</span>
-        <span className="moodmap__quad moodmap__quad--bl">Меланхолия</span>
-        <span className="moodmap__quad moodmap__quad--br">Кошмар</span>
+        <span className="moodmap__quad moodmap__quad--tl">Cozy</span>
+        <span className="moodmap__quad moodmap__quad--tr">Adrenaline</span>
+        <span className="moodmap__quad moodmap__quad--bl">Melancholy</span>
+        <span className="moodmap__quad moodmap__quad--br">Nightmare</span>
         <div className="moodmap__dots">
           {points.map(({ movie, x, y }) => {
             const stateClass = excluded[movie.id] ? 'is-out' : highlighted.has(movie.id) ? 'is-hit' : '';
@@ -143,22 +143,22 @@ export function MoodMap({ highlighted, excluded, onOpen }: Props) {
           type="button"
           className={`moodmap__puck ${puck ? '' : 'is-idle'}`}
           style={{ left: `${(puck?.x ?? 0.5) * 100}%`, top: `${(puck?.y ?? 0.5) * 100}%` }}
-          aria-label={`Позиция на картата: ${describe}. Мести със стрелките.`}
+          aria-label={`Map position: ${describe}. Move it with the arrow keys.`}
           onKeyDown={onKeyDown}
           onClick={() => !puck && commit({ x: 0.5, y: 0.5 }, true)}
         />
       </div>
       <div className="moodmap__axes" aria-hidden="true">
-        <span>← спокойно</span>
-        <span>интензивно →</span>
+        <span>← calm</span>
+        <span>intense →</span>
       </div>
       <p className="moodmap__hint">
         {puck ? (
           <>
-            Търсиш нещо <b>{describe}</b>. Точките са филмите; светлите отговарят най-добре.
+            You are after something <b>{describe}</b>. Each dot is a film; the bright ones fit best.
           </>
         ) : (
-          'Плъзни или натисни някъде по картата. Горе е светло, долу – мрачно.'
+          'Drag or tap anywhere on the map. Up is bright, down is dark.'
         )}
       </p>
     </div>

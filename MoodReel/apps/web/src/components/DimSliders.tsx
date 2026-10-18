@@ -11,7 +11,7 @@ export function DimSliders() {
 
   return (
     <div className="sliders">
-      <p className="sliders__hint">Всяко измерение е от 0 до 10. Сиво значи „без значение“ – докосни, за да го включиш.</p>
+      <p className="sliders__hint">Every dimension runs from 0 to 10. Grey means “don’t care” – touch a slider to switch it on.</p>
       <ul className="sliders__list">
         {DIMS.map((dim) => {
           const meta = DIM_META[dim];
@@ -26,10 +26,10 @@ export function DimSliders() {
                   {meta.label}
                 </label>
                 <span className="slider__value mono" aria-hidden="true">
-                  {active ? value.toFixed(1).replace('.0', '').replace('.', ',') : '—'}
+                  {active ? value.toFixed(1).replace('.0', '') : '—'}
                 </span>
                 {active && (
-                  <button type="button" className="slider__reset" onClick={() => reset(dim)} aria-label={`${meta.label}: без значение`}>
+                  <button type="button" className="slider__reset" onClick={() => reset(dim)} aria-label={`${meta.label}: don’t care`}>
                     ×
                   </button>
                 )}
@@ -41,7 +41,7 @@ export function DimSliders() {
                 max={10}
                 step={0.5}
                 value={value}
-                aria-valuetext={active ? `${meta.label} ${value} от 10` : `${meta.label}: без значение`}
+                aria-valuetext={active ? `${meta.label} ${value} out of 10` : `${meta.label}: don’t care`}
                 onChange={(e) => set(dim, Number(e.target.value))}
                 onPointerDown={() => !active && set(dim, value)}
                 style={{ '--fill': `${value * 10}%` } as CSSProperties}

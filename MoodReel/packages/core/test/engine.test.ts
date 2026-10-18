@@ -51,7 +51,7 @@ describe('recommend', () => {
     const { results, pool } = recommend(MOVIES, query);
     expect(results.map((r) => r.movie.id)).not.toContain('black-swan-2010');
     expect(pool.excluded['black-swan-2010']).toBe('reference');
-    expect(results[0]!.reasons[0]!.text).toMatch(/сходство с Black Swan/);
+    expect(results[0]!.reasons[0]!.text).toMatch(/similar to Black Swan/);
   });
 
   it('keeps the list varied (MMR) while still reading best-first', () => {

@@ -14,7 +14,7 @@ import { createContext, useContext, useEffect, useMemo, useReducer, type Dispatc
 import { readSharedEffects } from '../lib/share';
 import { readJson, writeJson } from '../lib/storage';
 
-export const PAD_GROUP_PREFIX = 'Карта: ';
+export const PAD_GROUP_PREFIX = 'Map: ';
 
 export interface MoodState {
   effects: Effect[];
@@ -123,7 +123,7 @@ export interface Chip {
   group: string;
   label: string;
   keys: string[];
-  /** Several effects behind one phrase ("Кофти ден → …"). */
+  /** Several effects behind one phrase ("Bad day → …"). */
   combo: boolean;
   detail?: string;
 }
@@ -143,7 +143,7 @@ export function effectChips(effects: readonly Effect[], byId: ReadonlyMap<string
         existing.detail = `${existing.detail}, ${described.label.toLowerCase()}`;
         continue;
       }
-      const chip: Chip = { id: `group:${effect.group}`, group: 'Комбинация', label: effect.group, keys: [key], combo: true, detail: described.label };
+      const chip: Chip = { id: `group:${effect.group}`, group: 'Combo', label: effect.group, keys: [key], combo: true, detail: described.label };
       groups.set(effect.group, chip);
       chips.push(chip);
       continue;

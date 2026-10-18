@@ -57,7 +57,7 @@ describe('POST /api/parse', () => {
   const { app } = makeApp();
 
   it('understands the brief', async () => {
-    const res = await request(app).post('/api/parse').send({ text: 'Искам нещо страшно, но не прекалено' }).expect(200);
+    const res = await request(app).post('/api/parse').send({ text: 'I want something scary but not too much' }).expect(200);
     expect(res.body.effects[0]).toMatchObject({ kind: 'dim', dim: 'fear', level: 'mid' });
     expect(res.body.understood).toBe(true);
   });
@@ -65,7 +65,7 @@ describe('POST /api/parse', () => {
   it('validates input with a readable message', async () => {
     const res = await request(app).post('/api/parse').send({ text: '' }).expect(400);
     expect(res.body.error).toBe('invalid_request');
-    expect(res.body.message).toBe('Напиши какво ти се гледа');
+    expect(res.body.message).toBe('Tell me what you feel like watching');
   });
 
   it('rejects malformed JSON', async () => {

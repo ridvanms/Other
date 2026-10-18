@@ -3,34 +3,34 @@ import { useStore } from '../state/store';
 import './Dealbreakers.css';
 
 const SWITCHES: Array<{ key: BooleanDealbreaker; hint: string }> = [
-  { key: 'noSadEnding', hint: 'Маха тъжните и мрачните финали. Без да ти казва кой какъв е.' },
-  { key: 'happyOnly', hint: 'Само филми, от които излизаш с усмивка.' },
-  { key: 'noGore', hint: 'Без кръв и натуралистично насилие.' },
-  { key: 'noJumpscares', hint: 'Без внезапни стряскания.' },
-  { key: 'noAnimalDeath', hint: 'Нито едно животно не умира.' },
-  { key: 'familyFriendly', hint: 'Подходящо за всички възрасти.' },
+  { key: 'noSadEnding', hint: 'Drops sad and bleak endings, without telling you which is which.' },
+  { key: 'happyOnly', hint: 'Only films you walk out of smiling.' },
+  { key: 'noGore', hint: 'No blood or graphic violence.' },
+  { key: 'noJumpscares', hint: 'No sudden scares.' },
+  { key: 'noAnimalDeath', hint: 'Not a single animal dies.' },
+  { key: 'familyFriendly', hint: 'Suitable for all ages.' },
 ];
 
 type Option = { id: string; label: string; effect: Effect | null };
 
 const RUNTIME: Option[] = [
-  { id: 'any', label: 'Всякаква', effect: null },
-  { id: '95', label: 'до 95 мин', effect: { kind: 'runtime', max: 95 } },
-  { id: '120', label: 'до 2 ч', effect: { kind: 'runtime', max: 120 } },
-  { id: 'long', label: 'над 2 ч', effect: { kind: 'runtime', min: 121 } },
+  { id: 'any', label: 'Any', effect: null },
+  { id: '95', label: 'up to 95 min', effect: { kind: 'runtime', max: 95 } },
+  { id: '120', label: 'up to 2 h', effect: { kind: 'runtime', max: 120 } },
+  { id: 'long', label: 'over 2 h', effect: { kind: 'runtime', min: 121 } },
 ];
 
 const ERA: Option[] = [
-  { id: 'any', label: 'Всички', effect: null },
-  { id: 'classic', label: 'до 1999', effect: { kind: 'era', maxYear: 1999 } },
+  { id: 'any', label: 'All', effect: null },
+  { id: 'classic', label: 'up to 1999', effect: { kind: 'era', maxYear: 1999 } },
   { id: 'mid', label: '2000–2013', effect: { kind: 'era', minYear: 2000, maxYear: 2013 } },
   { id: 'new', label: '2014+', effect: { kind: 'era', minYear: 2014 } },
 ];
 
 const FORMAT: Option[] = [
-  { id: 'any', label: 'Всичко', effect: null },
-  { id: 'only', label: 'Само анимация', effect: { kind: 'animation', mode: 'only' } },
-  { id: 'exclude', label: 'Без анимация', effect: { kind: 'animation', mode: 'exclude' } },
+  { id: 'any', label: 'Everything', effect: null },
+  { id: 'only', label: 'Animation only', effect: { kind: 'animation', mode: 'only' } },
+  { id: 'exclude', label: 'No animation', effect: { kind: 'animation', mode: 'exclude' } },
 ];
 
 export function Dealbreakers({ excludedCount }: { excludedCount: Partial<Record<string, number>> }) {
@@ -66,10 +66,10 @@ export function Dealbreakers({ excludedCount }: { excludedCount: Partial<Record<
           );
         })}
       </ul>
-      <Segmented legend="Дължина" name="runtime" options={RUNTIME} value={runtimeId} onPick={(o) => apply(dispatch, 'runtime', o)} />
-      <Segmented legend="Години" name="era" options={ERA} value={eraId} onPick={(o) => apply(dispatch, 'era', o)} />
-      <Segmented legend="Формат" name="format" options={FORMAT} value={formatId} onPick={(o) => apply(dispatch, 'animation', o)} />
-      {Object.keys(excludedCount).length > 0 && <p className="deals__note">Филмите, които условията изключват, угасват в контактния лист вдясно.</p>}
+      <Segmented legend="Length" name="runtime" options={RUNTIME} value={runtimeId} onPick={(o) => apply(dispatch, 'runtime', o)} />
+      <Segmented legend="Years" name="era" options={ERA} value={eraId} onPick={(o) => apply(dispatch, 'era', o)} />
+      <Segmented legend="Format" name="format" options={FORMAT} value={formatId} onPick={(o) => apply(dispatch, 'animation', o)} />
+      {Object.keys(excludedCount).length > 0 && <p className="deals__note">Films your rules exclude go dark on the contact sheet.</p>}
     </div>
   );
 }

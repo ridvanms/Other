@@ -6,7 +6,7 @@ import { Icon } from './Icon';
 import { Poster } from './Poster';
 import './FilmCard.css';
 
-const FLAG_LABEL = { gore: 'кръв', jumpscares: 'стряскания', animalDeath: 'умира животно' } as const;
+const FLAG_LABEL = { gore: 'gore', jumpscares: 'jump scares', animalDeath: 'an animal dies' } as const;
 
 interface Props {
   rec: Recommendation;
@@ -32,13 +32,13 @@ export function FilmCard({ rec, rank, ranked, onOpen }: Props) {
       className={`card ${featured ? 'card--featured' : ''}`}
       aria-labelledby={`card-${movie.id}`}
     >
-      <button type="button" className="card__poster" onClick={() => onOpen(movie.id)} aria-label={`Детайли за ${movie.title}`}>
+      <button type="button" className="card__poster" onClick={() => onOpen(movie.id)} aria-label={`Details for ${movie.title}`}>
         <Poster movie={movie} size={featured ? 'md' : 'sm'} />
       </button>
       <div className="card__body">
         <div className="card__top">
           <div className="card__titles">
-            {featured && <p className="eyebrow card__eyebrow">Най-доброто съвпадение</p>}
+            {featured && <p className="eyebrow card__eyebrow">Best match</p>}
             <h3 id={`card-${movie.id}`} className="card__title">
               <button type="button" onClick={() => onOpen(movie.id)}>
                 {movie.title}
@@ -47,21 +47,21 @@ export function FilmCard({ rec, rank, ranked, onOpen }: Props) {
             <p className="card__meta mono">
               <span>{movie.year}</span>
               <span>{movie.director}</span>
-              <span title="Времетраене">{timecode(movie.runtime)}</span>
+              <span title="Runtime">{timecode(movie.runtime)}</span>
               <span>{movie.genres.map((g) => GENRE_LABEL[g]).join(' / ')}</span>
             </p>
           </div>
-          <div className={`card__score ${ranked ? '' : 'is-unranked'}`} title={ranked ? 'Колко добре филмът пасва на желанията ти' : 'Няма предпочитания – редът е на случаен принцип'}>
+          <div className={`card__score ${ranked ? '' : 'is-unranked'}`} title={ranked ? 'How well the film fits your wishes' : 'No preferences yet, so the order is shuffled'}>
             <span className="card__score-value">
               {ranked ? score : '—'}
               {ranked && <small>%</small>}
             </span>
-            <span className="card__score-label">{ranked ? 'съвпадение' : 'без оценка'}</span>
+            <span className="card__score-label">{ranked ? 'match' : 'unscored'}</span>
           </div>
         </div>
         <p className="card__blurb">{movie.blurb}</p>
         {reasons.length > 0 && (
-          <ul className="card__reasons" aria-label="Защо този филм">
+          <ul className="card__reasons" aria-label="Why this film">
             {reasons.slice(0, featured ? 5 : 3).map((reason) => (
               <li key={reason.text} className={`chip chip--${reason.tone === 'warn' ? 'warn' : reason.tone === 'good' ? 'good' : 'plain'}`}>
                 {reason.text}
@@ -72,19 +72,19 @@ export function FilmCard({ rec, rank, ranked, onOpen }: Props) {
         <div className="card__foot">
           <EndingReveal ending={movie.ending} />
           {flags.length > 0 && (
-            <span className="card__flags" title="Предупреждения за съдържание">
+            <span className="card__flags" title="Content warnings">
               {flags.map((f) => FLAG_LABEL[f]).join(' · ')}
             </span>
           )}
-          <span className="card__age mono">{movie.age === 0 ? 'за всички' : `${movie.age}+`}</span>
+          <span className="card__age mono">{movie.age === 0 ? 'all ages' : `${movie.age}+`}</span>
           <span className="card__actions">
             <button type="button" className={`btn btn--small ${saved ? 'is-saved' : ''}`} aria-pressed={saved} onClick={() => dispatch({ type: 'toggleWatch', id: movie.id })}>
               <Icon name={saved ? 'check' : 'bookmark'} size={14} />
-              {saved ? 'В списъка' : 'Запази'}
+              {saved ? 'Saved' : 'Save'}
             </button>
             <button type="button" className="btn btn--small btn--ghost" onClick={() => dispatch({ type: 'toggleSeen', id: movie.id })}>
               <Icon name="eye" size={14} />
-              Гледал(а) съм го
+              Seen it
             </button>
           </span>
         </div>

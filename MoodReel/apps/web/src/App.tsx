@@ -19,7 +19,7 @@ import { StoreProvider, useStore } from './state/store';
 import './App.css';
 
 /** The page opens on the brief's own example, so the first screen already shows what the tool does. */
-const OPENING_PROMPT = 'Нещо страшно, но не прекалено, без тъжен край';
+const OPENING_PROMPT = 'Something scary but not too much, no sad ending';
 
 interface Boot {
   api: Api;
@@ -45,10 +45,10 @@ export function App() {
     return (
       <div className="boot">
         <p className="eyebrow">MoodReel</p>
-        <h1>Лентата се скъса</h1>
+        <h1>The reel snapped</h1>
         <p>{failed}</p>
         <button type="button" className="btn btn--primary" onClick={() => window.location.reload()}>
-          Опитай пак
+          Try again
         </button>
       </div>
     );
@@ -57,7 +57,7 @@ export function App() {
     return (
       <div className="boot" aria-busy="true">
         <Icon name="reel" size={44} className="boot__reel" />
-        <p className="eyebrow">Зареждам лентата…</p>
+        <p className="eyebrow">Loading the reel…</p>
       </div>
     );
   }
@@ -102,13 +102,13 @@ function Shell() {
   const feedback = useMemo(() => {
     if (parseError) return { tone: 'warn' as const, text: parseError };
     const last = state.lastParse;
-    if (!last) return { tone: 'info' as const, text: `Започваме с пример от заданието: „${OPENING_PROMPT}“. Напиши своето.` };
+    if (!last) return { tone: 'info' as const, text: `Starting you off with an example: “${OPENING_PROMPT}”. Type your own.` };
     const { result } = last;
-    if (!result.understood) return { tone: 'warn' as const, text: 'Не разбрах съвсем. Опитай с настроение („смешно“, „мрачно“), жанр, филм, на който да прилича, или условие като „без тъжен край“.' };
+    if (!result.understood) return { tone: 'warn' as const, text: 'I didn’t quite get that. Try a mood (“funny”, “dark”), a genre, a film it should feel like, or a rule like “no sad ending”.' };
     const parts = [] as string[];
-    if (result.moods.length) parts.push(`Усещам: ${result.moods.join(', ').toLowerCase()}.`);
-    parts.push(result.mode === 'refine' ? 'Добавих това към текущите ти желания.' : `Разбрах ${result.effects.length === 1 ? 'едно нещо' : `${result.effects.length} неща`} – виж ги по-долу.`);
-    if (result.unknown.length) parts.push(`Не разпознах: ${result.unknown.slice(0, 4).map((w) => `„${w}“`).join(', ')}.`);
+    if (result.moods.length) parts.push(`Noted: ${result.moods.join(', ').toLowerCase()}.`);
+    parts.push(result.mode === 'refine' ? 'Added that to your current wishes.' : `Got ${result.effects.length === 1 ? 'one thing' : `${result.effects.length} things`} – see them below.`);
+    if (result.unknown.length) parts.push(`Didn’t recognise: ${result.unknown.slice(0, 4).map((w) => `“${w}”`).join(', ')}.`);
     return { tone: 'info' as const, text: parts.join(' ') };
   }, [state.lastParse, parseError]);
 
@@ -121,12 +121,12 @@ function Shell() {
           <>
             <section className="hero" aria-labelledby="hero-title">
               <div className="hero__copy">
-                <p className="eyebrow">{catalog.length} ръчно описани филма · без спойлери</p>
+                <p className="eyebrow">{catalog.length} hand-profiled films · no spoilers</p>
                 <h1 id="hero-title">
-                  Какво ще гледаме <em>тази вечер?</em>
+                  What are we watching <em>tonight?</em>
                 </h1>
                 <p className="hero__lead">
-                  Кажи го с думи, нагласи пулта или остави Оракула да пита. MoodReel тегли всеки филм по десет измерения на настроението и изключва това, което не искаш – без да издава краищата.
+                  Say it in your own words, tune the control desk or let the Oracle ask. MoodReel scores every film on ten mood dimensions and rules out what you don’t want, without giving away the endings.
                 </p>
               </div>
               <PromptBar take={takes} busy={parsing} onSubmit={submit} feedback={feedback} />
@@ -153,16 +153,16 @@ function Shell() {
       <footer className="footer">
         <div className="footer__inner">
           <p>
-            <b>MoodReel</b> – уеб проект. Данните за филмите и плакатите са създадени за проекта: настроенията са оценени ръчно, плакатите се генерират от код.
+            <b>MoodReel</b> – a web project. The film data and posters were made for it: moods are scored by hand and posters are generated from code.
           </p>
-          <p className="mono">{api.mode === 'remote' ? 'API · Express + React' : 'Двигателят работи в браузъра'}</p>
+          <p className="mono">{api.mode === 'remote' ? 'API · Express + React' : 'The engine runs in your browser'}</p>
         </div>
       </footer>
 
       {view === 'mood' && (
         <div className="pickbar">
           <button type="button" className="btn btn--primary pickbar__btn" onClick={() => setPicking(true)} disabled={!data?.results.length}>
-            <Icon name="reel" size={18} /> Избери ми филм
+            <Icon name="reel" size={18} /> Pick a film for me
           </button>
         </div>
       )}

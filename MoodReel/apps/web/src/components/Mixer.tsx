@@ -7,9 +7,9 @@ import { Presets } from './Presets';
 import './Mixer.css';
 
 const TABS = [
-  { id: 'map', label: 'Карта' },
-  { id: 'fine', label: 'Фино' },
-  { id: 'rules', label: 'Условия' },
+  { id: 'map', label: 'Map' },
+  { id: 'fine', label: 'Fine-tune' },
+  { id: 'rules', label: 'Rules' },
 ] as const;
 type Tab = (typeof TABS)[number]['id'];
 
@@ -42,10 +42,10 @@ export function Mixer({ highlighted, excluded, byReason, onOpen }: Props) {
     <section className="mixer panel" aria-labelledby={`${base}-title`}>
       <header className="mixer__head">
         <div>
-          <p className="eyebrow">Пулт</p>
-          <h2 id={`${base}-title`}>Настрой ръчно</h2>
+          <p className="eyebrow">Control desk</p>
+          <h2 id={`${base}-title`}>Tune it by hand</h2>
         </div>
-        <div className="mixer__tabs" role="tablist" aria-label="Начини за настройка" onKeyDown={onKeyDown}>
+        <div className="mixer__tabs" role="tablist" aria-label="Ways to tune" onKeyDown={onKeyDown}>
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -68,7 +68,7 @@ export function Mixer({ highlighted, excluded, byReason, onOpen }: Props) {
           <>
             <MoodMap highlighted={highlighted} excluded={excluded} onOpen={onOpen} />
             <div className="mixer__presets">
-              <p className="eyebrow">Или избери вечер</p>
+              <p className="eyebrow">Or pick an evening</p>
               <Presets />
             </div>
           </>

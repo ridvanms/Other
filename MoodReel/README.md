@@ -1,122 +1,122 @@
-# MoodReel – филм според настроението
+# MoodReel – pick a film by how you feel
 
-> „Искам нещо страшно, но не прекалено.“ · „Нещо объркващо като The Thing или Black Swan.“ · „Избери ми филм, не искам тъжен край.“
+> “I want something scary, but not too much.” · “Something mind-bending like The Thing or Black Swan.” · “Pick me a movie, no sad endings.”
 
-MoodReel не е поредният сайт с ревюта и трейлъри. Пишеш как се чувстваш на нормален български, а сайтът го превръща в конкретни желания, изключва това, което не искаш (без да издава краищата), подрежда 141 ръчно описани филма и накрая завърта лента, която спира на един от тях.
+MoodReel is not another site full of reviews and trailers. You describe how you feel in plain English, and the site turns that into concrete wishes. It rules out what you don't want (without giving away any endings), ranks 141 hand-profiled films and finally spins a reel that stops on one of them.
 
-## Какво може
+## What it does
 
 | | |
 |---|---|
-| **Кажи го с думи** | Собствен парсер за български (и смесен английски): разбира модификатори („не прекалено“, „много“, „малко“, „по-малко страшно“), отрицания, препратки към филми („като Черният лебед“, „в стил Нолан“), години („от 80-те“), дължина („под час и половина“), компания („с децата“, „за среща“) и дори състояние („кофти ден съм“ → нещо за повдигане, а не тъжен филм). Всяко разбрано нещо става чип, който можеш да махнеш. |
-| **Без тъжен край – без спойлери** | Условия като „без тъжен край“, „без кръв“, „без стряскания“, „животните оцеляват“, „подходящ за деца“. Контактният лист показва целия каталог като кадри от лента; изключените угасват с причината, но видът на края остава скрит, докато сам не го отключиш. |
-| **Пулт** | Карта на настроенията (всички филми като точки по интензивност × мрачност, с плъзгаща се шайба), фини плъзгачи за 10 измерения и готови вечери („Петък с приятели“, „Сам в 2 през нощта“…). |
-| **Избери ми филм** | Претеглен жребий между най-добрите съвпадения, анимиран като въртяща се филмова лента, който завършва с кино билет: защо точно този филм, отпечатък на настроението му спрямо твоето желание, „Гледам го!“ / „Друг“ / „Гледал(а) съм го“. |
-| **Оракулът** | Akinator за филми: всеки следващ въпрос е този с най-голяма очаквана информационна печалба спрямо оставащите филми. Обикновено стигат 5–8 въпроса. |
-| **Моят списък** | Запазени и гледани филми (гледаните не се предлагат повече). |
-| **Пулс** | Какво избират хората тази седмица и какво търсят спрямо средното – анонимно, от гласовете „Гледам го!“. |
+| **Say it in words** | A hand-written natural-language parser understands modifiers (“not too”, “very”, “a little”, “less scary”, “even darker”), negation, references to films (“like Black Swan”, “something like Nolan”), eras (“from the 80s”), length (“an hour and a half max”), company (“with the kids”, “date night”) and even your own state (“had a bad day” → something uplifting, not a sad film). Every recognised wish becomes a chip you can remove. Bulgarian input works too. |
+| **No sad ending, no spoilers** | Rules such as “no sad ending”, “no gore”, “no jump scares”, “the animals survive” and “kid-friendly”. The contact sheet shows the whole catalog as film frames; excluded ones go dark with the reason, but the kind of ending stays hidden until you unlock it yourself. |
+| **Control desk** | A mood map (every film plotted by intensity × darkness, with a draggable puck), fine-tune sliders for 10 dimensions and ready-made evenings (“Friday with friends”, “Alone at 2 a.m.”…). |
+| **Pick a film for me** | A weighted draw among the best matches, animated as a spinning film reel, ending in a cinema ticket: why this film, its mood fingerprint against your wish, and “I'll watch it!” / “Another” / “Seen it”. |
+| **The Oracle** | Akinator for films: each next question is the one with the highest expected information gain over the films still left. Five to eight questions usually do it. |
+| **My list** | Saved and already-seen films (seen films are no longer suggested). |
+| **Pulse** | What people picked this week and what they look for compared with the midpoint, built anonymously from “I'll watch it!” votes. |
 
-## Архитектура
+## Architecture
 
 ```mermaid
 flowchart LR
-  subgraph core["packages/core (чист TypeScript, без зависимости)"]
-    C[Каталог · 141 филма] --> E[Двигател за препоръки]
-    P[Парсер за български] --> X[Ефекти → заявка]
+  subgraph core["packages/core (pure TypeScript, no dependencies)"]
+    C[Catalog · 141 films] --> E[Recommendation engine]
+    P[Natural-language parser] --> X[Effects → query]
     X --> E
-    O[Оракул]
+    O[Oracle]
   end
   subgraph server["apps/server (Express 5)"]
-    A[REST API + zod валидация] --> core
+    A[REST API + zod validation] --> core
     S[(community.json)] --- A
   end
   subgraph web["apps/web (React 19 + Vite)"]
-    UI[Интерфейс] --> R[Remote API клиент] --> A
-    UI --> L[Локален API клиент] --> core
+    UI[Interface] --> R[Remote API client] --> A
+    UI --> L[Local API client] --> core
   end
 ```
 
-- **`packages/core`** – цялата логика, споделена между сървъра и браузъра: типове, каталог, NLP парсер, препоръчващ двигател, жребий и оракул. Без нито една външна зависимост; 190 теста.
-- **`apps/server`** – Express 5 API: валидация със zod, rate limiting, helmet (CSP), компресия, структурирани логове, грациозно спиране и JSON хранилище с атомарни записи (temp файл + rename) за гласовете на общността. В production сервира и билднатия клиент.
-- **`apps/web`** – React клиент. Един и същ договор (`Api`) има две реализации: HTTP клиент към сървъра и локална, която пуска двигателя в браузъра. Ако при зареждане сървърът не отговаря, сайтът минава тихо на локалния режим. Така същият код се билдва и като **един HTML файл** без сървър.
+- **`packages/core`** – all the logic, shared by the server and the browser: types, catalog, parser, recommendation engine, the draw and the oracle. No external dependencies; 198 tests.
+- **`apps/server`** – an Express 5 API with zod validation, rate limiting, helmet (CSP), compression, structured logs, graceful shutdown and a JSON store with atomic writes (temp file + rename) for community votes. In production it also serves the built client.
+- **`apps/web`** – the React client. One contract (`Api`) has two implementations: an HTTP client for the server and a local one that runs the engine in the browser. If the server does not answer at startup, the site quietly switches to local mode. The same code therefore also builds into **a single HTML file** that needs no server.
 
-### Как се смята съвпадението
+### How a match is scored
 
-1. Всеки филм има профил по 10 измерения от 0 до 10: страх, напрежение, мозъчна гимнастика, смях, романтика, екшън, тъга, мрачност, магия, темпо. Плюс вид на края (светъл / горчиво-сладък / отворен / тъжен / мрачен), предупреждения за съдържание и възрастова препоръка.
-2. Всяко желание е ограничение `{ target, tolerance, min, max, weight }`. Съвпадението по едно измерение е гаусово около целта, с рязко наказание извън min/max.
-3. Измеренията се комбинират с **претеглена геометрична средна** – едно силно пропуснато желание сваля целия резултат, както и трябва. Към нея влизат сходството с примерни филми (разстояние в профилното пространство + Jaccard по теми), жанров афинитет („страшно“ предпочита хорър пред военен филм със страх 4) и ключови думи.
-4. **Maximal Marginal Relevance** избира кои 12 филма да се покажат, за да не са десет копия на един и същ.
-5. Гласовете на общността влизат като малък (±5%) байесов приор с Beta(2, 2), така че един щастлив глас не изстрелва филм най-горе.
-6. „Избери ми филм“ тегли със softmax по резултата – почти винаги от върха, но не роботски.
+1. Every film has a profile on 10 dimensions from 0 to 10: fear, tension, mind-bending, laughs, romance, action, tears, darkness, wonder and pace. Plus the kind of ending (bright / bittersweet / open / sad / bleak), content warnings and an age rating.
+2. Every wish is a constraint `{ target, tolerance, min, max, weight }`. The fit on one dimension is Gaussian around the target, with a steep penalty outside min/max.
+3. Dimensions combine through a **weighted geometric mean**, so one badly missed wish drags the whole score down, as it should. Similarity to example films (distance in profile space plus Jaccard over themes), genre affinity (“scary” prefers horror over a war film that happens to score 4 on fear) and keywords join the same mean.
+4. **Maximal Marginal Relevance** decides which 12 films to show, so the list is not ten copies of the same film.
+5. Community votes enter as a small (±5%) Bayesian prior with Beta(2, 2), so one lucky vote cannot launch a film to the top.
+6. “Pick a film for me” draws with a softmax over the scores: almost always from the top, but not robotically.
 
-### Оракулът
+### The Oracle
 
-Всички филми започват с еднакво тегло. Всеки въпрос има мека вероятност p(филм) отговорът да е „да“. Отговорът („да“, „по-скоро да“, „все ми е едно“…) обновява теглата байесово, със 7% шум, защото хората (и ръчните оценки) грешат. Следващият въпрос е този, който минимизира очакваната ентропия. API-то е stateless – клиентът праща историята, сървърът я преиграва.
+All films start with equal weight. Every question has a soft probability p(film) that the honest answer is “yes”. Each answer (“yes”, “probably”, “don't care”…) updates the weights Bayes-style, with 7% noise because people (and hand-scored profiles) are not perfect. The next question is the one that minimises the expected entropy. The API is stateless: the client sends the history and the server replays it.
 
-## Пускане
+## Running it
 
-Нужен е **Node.js 22.12+**.
+You need **Node.js 22.12+**.
 
 ```bash
 cd MoodReel
 npm install
-npm run dev        # API на :4000 + Vite на :5173 (с proxy към API)
+npm run dev        # API on :4000 + Vite on :5173 (proxying to the API)
 ```
 
-Отвори http://localhost:5173.
+Open http://localhost:5173.
 
-| Скрипт | Какво прави |
+| Script | What it does |
 |---|---|
-| `npm run dev` | Сървър и клиент в режим на разработка (hot reload). |
-| `npm test` | Всички тестове (core, server, web). |
-| `npm run typecheck` | TypeScript проверка на трите пакета. |
-| `npm run build` | Production билд на клиента и бъндъл на сървъра (esbuild). |
-| `npm start` | Пуска production сървъра на :4000; той сервира и клиента. |
-| `npm run build:static` | Целият сайт като един HTML файл в `apps/web/dist-standalone/` – работи без сървър (GitHub Pages, флашка, имейл). |
+| `npm run dev` | Server and client in development mode (hot reload). |
+| `npm test` | Every test (core, server, web). |
+| `npm run typecheck` | TypeScript check of all three packages. |
+| `npm run build` | Production build of the client and an esbuild bundle of the server. |
+| `npm start` | Starts the production server on :4000; it also serves the client. |
+| `npm run build:static` | The whole site as one HTML file in `apps/web/dist-standalone/`, which works without a server (GitHub Pages, a USB stick, an email attachment). |
 
-### Настройки на сървъра
+### Server settings
 
-| Променлива | По подразбиране | |
+| Variable | Default | |
 |---|---|---|
 | `PORT` | `4000` | |
 | `HOST` | `0.0.0.0` | |
-| `DATA_DIR` | `./data` | Къде се пази `community.json`. |
-| `WEB_DIST` | `../web/dist` | Билднатият клиент; празно = само API. |
-| `TRUST_PROXY` | `0` | Брой прокси хопове пред сървъра (за коректен rate limit). |
-| `NODE_ENV` | `development` | `production` включва JSON логове. |
+| `DATA_DIR` | `./data` | Where `community.json` is stored. |
+| `WEB_DIST` | `../web/dist` | The built client; empty means API only. |
+| `TRUST_PROXY` | `0` | Number of proxy hops in front of the server (for correct rate limiting). |
+| `NODE_ENV` | `development` | `production` switches on JSON logs. |
 
 ## API
 
-Всички отговори са JSON; грешките имат вида `{ error, message, issues? }` със съобщение на български.
+Every response is JSON; errors look like `{ error, message, issues? }`.
 
-| Метод | Път | |
+| Method | Path | |
 |---|---|---|
-| GET | `/api/health` | Жив ли е сървърът. |
-| GET | `/api/movies` | Каталогът (кешира се 5 мин). |
-| GET | `/api/movies/:id` | Един филм + 6 най-близки. |
-| POST | `/api/parse` | `{ text }` → разбраните ефекти, режим `replace`/`refine`, непознати думи, усетено настроение. |
-| POST | `/api/recommend` | `{ query, limit?, seed? }` → резултати с причини + отчет кой филм защо е изключен. |
-| POST | `/api/pick` | `{ query, seed? }` → избраният филм, кадрите за лентата, алтернативи. Възпроизводимо по `seed`. |
-| POST | `/api/oracle` | `{ history, query? }` → следващ въпрос или присъда. |
-| POST | `/api/feedback` | `{ clientId, movieId, verdict, mood? }` – анонимен глас, един на човек на 6 часа. |
-| GET | `/api/stats` | Пулсът на общността за седмицата. |
+| GET | `/api/health` | Is the server alive. |
+| GET | `/api/movies` | The catalog (cached for 5 minutes). |
+| GET | `/api/movies/:id` | One film plus its 6 nearest neighbours. |
+| POST | `/api/parse` | `{ text }` → recognised effects, `replace`/`refine` mode, unknown words, detected mood. |
+| POST | `/api/recommend` | `{ query, limit?, seed? }` → results with reasons, plus a report of which film was excluded and why. |
+| POST | `/api/pick` | `{ query, seed? }` → the chosen film, the frames for the reel, alternatives. Reproducible by `seed`. |
+| POST | `/api/oracle` | `{ history, query? }` → the next question or the verdict. |
+| POST | `/api/feedback` | `{ clientId, movieId, verdict, mood? }` – an anonymous vote, one per person every 6 hours. |
+| GET | `/api/stats` | The community pulse for the week. |
 
-## Структура
+## Layout
 
 ```
 MoodReel/
-├── packages/core/        # двигател, парсер, оракул, каталог (+ тестове)
+├── packages/core/        # engine, parser, oracle, catalog (+ tests)
 │   └── src/
-│       ├── catalog/      # 141 ръчно описани филма
-│       ├── engine/       # филтри, скоринг, MMR, жребий, сходство
-│       ├── nlp/          # нормализация, речник, заглавия, парсер
-│       └── oracle/       # въпроси и информационна печалба
-├── apps/server/          # Express API, хранилище, middleware (+ тестове)
-└── apps/web/             # React клиент, стилове, тестове на състоянието
+│       ├── catalog/      # 141 hand-profiled films
+│       ├── engine/       # filters, scoring, MMR, draw, similarity
+│       ├── nlp/          # normalisation, vocabulary, titles, parser
+│       └── oracle/       # questions and information gain
+├── apps/server/          # Express API, store, middleware (+ tests)
+└── apps/web/             # React client, styles, state tests
 ```
 
-## Бележки за данните
+## Notes on the data
 
-- Профилите по настроение, видът на края и предупрежденията са оценени ръчно за проекта. Те са субективни – точно затова интерфейсът винаги показва числата и причините.
-- Плакатите не са свалени отникъде: всеки се генерира от кода по палитрата и жанра на филма. Няма външни API ключове, няма проследяване.
-- Описанията са без спойлери; видът на края е скрит зад бутон.
+- Mood profiles, ending types and content warnings were scored by hand for this project. They are subjective, which is exactly why the interface always shows the numbers and the reasons.
+- No posters are downloaded from anywhere: each one is generated in code from the film's palette and genre. No external API keys, no tracking.
+- Blurbs contain no spoilers; the kind of ending sits behind a button.

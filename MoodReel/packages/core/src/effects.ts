@@ -31,7 +31,7 @@ export type EffectBody =
  */
 export type Effect = EffectBody & { group?: string };
 
-/** A relative tweak produced by phrases like "по-малко страшно". Resolved against existing effects. */
+/** A relative tweak produced by phrases like "less scary". Resolved against existing effects. */
 export interface DimDelta {
   kind: 'dimDelta';
   dim: Dim;
@@ -206,11 +206,11 @@ export function buildQuery(effects: readonly Effect[], exclude: readonly string[
 }
 
 const LEVEL_WORD: Record<Level, string> = {
-  none: 'никак',
-  low: 'малко',
-  mid: 'умерено',
-  high: 'много',
-  max: 'на макс',
+  none: 'none',
+  low: 'a little',
+  mid: 'moderate',
+  high: 'a lot',
+  max: 'maxed out',
 };
 
 export interface EffectDescription {
@@ -225,62 +225,62 @@ export function describeEffect(effect: Effect, titleOf: (id: string) => string):
     case 'dim': {
       const meta = DIM_META[effect.dim];
       const c = effect.constraint;
-      if (effect.level) return { group: 'Настроение', label: `${meta.label} · ${LEVEL_WORD[effect.level]}` };
-      if (c.max !== undefined && c.min === undefined && c.target <= 2) return { group: 'Настроение', label: `Без ${meta.label.toLowerCase()}` };
-      return { group: 'Настроение', label: `${meta.label} ≈ ${formatTarget(c.target)}` };
+      if (effect.level) return { group: 'Mood', label: `${meta.label} · ${LEVEL_WORD[effect.level]}` };
+      if (c.max !== undefined && c.min === undefined && c.target <= 2) return { group: 'Mood', label: `No ${meta.label.toLowerCase()}` };
+      return { group: 'Mood', label: `${meta.label} ≈ ${formatTarget(c.target)}` };
     }
     case 'like':
-      return { group: 'Прилича на', label: titleOf(effect.movieId) };
+      return { group: 'Like', label: titleOf(effect.movieId) };
     case 'genre':
-      return { group: effect.mode === 'include' ? 'Жанр' : 'Без жанр', label: GENRE_LABEL[effect.genre] };
+      return { group: effect.mode === 'include' ? 'Genre' : 'Not', label: GENRE_LABEL[effect.genre] };
     case 'tag':
-      return { group: 'Тема', label: tagLabel(effect.tag) };
+      return { group: 'Theme', label: tagLabel(effect.tag) };
     case 'keyword':
-      return { group: 'Ключова дума', label: effect.word };
+      return { group: 'Keyword', label: effect.word };
     case 'deal':
-      return { group: 'Условие', label: DEAL_LABEL[effect.key] };
+      return { group: 'Rule', label: DEAL_LABEL[effect.key] };
     case 'runtime':
-      return { group: 'Времетраене', label: runtimeRange(effect.min, effect.max) };
+      return { group: 'Length', label: runtimeRange(effect.min, effect.max) };
     case 'era':
-      return { group: 'Години', label: yearRange(effect.minYear, effect.maxYear) };
+      return { group: 'Years', label: yearRange(effect.minYear, effect.maxYear) };
     case 'animation':
-      return { group: 'Формат', label: effect.mode === 'only' ? 'Само анимация' : 'Без анимация' };
+      return { group: 'Format', label: effect.mode === 'only' ? 'Animation only' : 'No animation' };
   }
 }
 
 export const DEAL_LABEL: Record<BooleanDealbreaker, string> = {
-  noSadEnding: 'Без тъжен край',
-  happyOnly: 'Само щастлив край',
-  noGore: 'Без кръв',
-  noJumpscares: 'Без стряскания',
-  noAnimalDeath: 'Животните оцеляват',
-  familyFriendly: 'Подходящ за деца',
+  noSadEnding: 'No sad ending',
+  happyOnly: 'Happy endings only',
+  noGore: 'No gore',
+  noJumpscares: 'No jump scares',
+  noAnimalDeath: 'The animals survive',
+  familyFriendly: 'Kid-friendly',
 };
 
 function formatTarget(target: number): string {
-  return Number.isInteger(target) ? String(target) : target.toFixed(1).replace('.', ',');
+  return Number.isInteger(target) ? String(target) : target.toFixed(1);
 }
 
 function minutes(m: number): string {
   const h = Math.floor(m / 60);
   const r = m % 60;
-  if (h === 0) return `${r} мин`;
-  return r ? `${h} ч ${r} мин` : `${h} ч`;
+  if (h === 0) return `${r} min`;
+  return r ? `${h} h ${r} min` : `${h} h`;
 }
 
 function runtimeRange(min?: number, max?: number): string {
   if (min !== undefined && max !== undefined) return `${minutes(min)} – ${minutes(max)}`;
-  if (max !== undefined) return `до ${minutes(max)}`;
-  if (min !== undefined) return `над ${minutes(min)}`;
-  return 'всяко';
+  if (max !== undefined) return `up to ${minutes(max)}`;
+  if (min !== undefined) return `over ${minutes(min)}`;
+  return 'any';
 }
 
 function yearRange(min?: number, max?: number): string {
   if (min !== undefined && max !== undefined) {
-    if (max - min === 9 && min % 10 === 0) return min >= 2000 ? `${min}-те` : `${String(min).slice(2)}-те`;
+    if (max - min === 9 && min % 10 === 0) return min >= 2000 ? `${min}s` : `’${String(min).slice(2)}s`;
     return `${min}–${max}`;
   }
-  if (min !== undefined) return `след ${min}`;
-  if (max !== undefined) return `до ${max}`;
-  return 'всички';
+  if (min !== undefined) return `${min} or later`;
+  if (max !== undefined) return `up to ${max}`;
+  return 'all';
 }

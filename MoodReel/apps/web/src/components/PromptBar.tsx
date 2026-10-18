@@ -3,14 +3,14 @@ import { useReducedMotion } from '../hooks/useMediaQuery';
 import './PromptBar.css';
 
 export const EXAMPLES = [
-  'Нещо страшно, но не прекалено',
-  'Нещо объркващо като The Thing или Black Swan',
-  'Избери ми филм, не искам тъжен край',
-  'Кофти ден съм, искам нещо за повдигане',
-  'С децата, нещо вълшебно, до 2 часа',
-  'Романтична комедия от 90-те',
-  'Мрачен трилър с обрат, без кръв',
-  'Нещо в стил Нолан, но по-кратко',
+  'Something scary, but not too scary',
+  'Something mind-bending like The Thing or Black Swan',
+  'Pick me a movie, no sad endings',
+  'Bad day, I need something uplifting',
+  'With the kids, something magical, under 2 hours',
+  'A romantic comedy from the 90s',
+  'A dark thriller with a twist, no gore',
+  'Something like Nolan, but shorter',
 ];
 
 interface Props {
@@ -61,12 +61,12 @@ export function PromptBar({ take, busy, onSubmit, feedback }: Props) {
         <span className="slate__base" />
       </div>
       <div className="slate__meta mono" aria-hidden="true">
-        <span>Продукция: <b>тази вечер</b></span>
-        <span>Сцена: <b>настроение</b></span>
-        <span>Дубл: <b>{String(take).padStart(2, '0')}</b></span>
+        <span>Production: <b>tonight</b></span>
+        <span>Scene: <b>mood</b></span>
+        <span>Take: <b>{String(take).padStart(2, '0')}</b></span>
       </div>
       <label htmlFor={inputId} className="slate__label">
-        Опиши с думи какво ти се гледа
+        Describe what you feel like watching
       </label>
       <div className="slate__field">
         <textarea
@@ -86,11 +86,11 @@ export function PromptBar({ take, busy, onSubmit, feedback }: Props) {
           spellCheck={false}
         />
         <button className="btn btn--primary slate__go" type="submit" disabled={busy || !text.trim()}>
-          {busy ? 'Мисля…' : 'Намери'}
+          {busy ? 'Thinking…' : 'Find'}
         </button>
       </div>
       <div className="slate__examples">
-        <span className="eyebrow">Опитай</span>
+        <span className="eyebrow">Try</span>
         {EXAMPLES.slice(0, 6).map((example) => (
           <button
             key={example}

@@ -1,6 +1,6 @@
 # Other
 addingFiles to different areas of  learning!
 
-## Проекти
+## Projects
 
-- [MoodReel](MoodReel/) – избор на филм според настроението (React + Express + TypeScript).
+- [MoodReel](MoodReel/) – pick a film by how you feel (React + Express + TypeScript).

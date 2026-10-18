@@ -14,16 +14,16 @@ function parsed(state: MoodState, text: string): MoodState {
 
 describe('store reducer', () => {
   it('replaces the wish list on a fresh prompt and refines it on a tweak', () => {
-    let state = parsed(empty, 'нещо страшно');
+    let state = parsed(empty, 'something scary');
     expect(state.effects.map((e) => e.kind)).toEqual(['dim']);
-    state = parsed(state, 'без кръв');
+    state = parsed(state, 'no gore');
     expect(state.effects).toHaveLength(2);
-    state = parsed(state, 'романтична комедия');
+    state = parsed(state, 'a romantic comedy');
     expect(state.effects.some((e) => e.kind === 'deal')).toBe(false);
   });
 
   it('removes a whole phrase at once', () => {
-    const state = parsed(empty, 'кофти ден съм');
+    const state = parsed(empty, 'had a bad day');
     const chips = effectChips(state.effects, byId);
     expect(chips).toHaveLength(1);
     const next = reducer(state, { type: 'remove', keys: chips[0]!.keys });
@@ -31,7 +31,7 @@ describe('store reducer', () => {
   });
 
   it('a slider detaches a dimension from its phrase group', () => {
-    const state = parsed(empty, 'кофти ден съм');
+    const state = parsed(empty, 'had a bad day');
     const next = reducer(state, { type: 'upsert', effect: { kind: 'dim', dim: 'humor', constraint: { target: 9 } } });
     const humor = next.effects.find((e): e is Extract<Effect, { kind: 'dim' }> => e.kind === 'dim' && e.dim === 'humor');
     expect(humor?.group).toBeUndefined();
@@ -43,7 +43,7 @@ describe('store reducer', () => {
     state = reducer(state, { type: 'pad', pad: { x: 0.1, y: 0.1 }, effects: padEffects(0.1, 0.1) });
     const chips = effectChips(state.effects, byId);
     expect(chips).toHaveLength(1);
-    expect(chips[0]!.label).toContain('спокойно');
+    expect(chips[0]!.label).toContain('calm');
     state = reducer(state, { type: 'remove', keys: chips[0]!.keys });
     expect(state.pad).toBeNull();
   });
@@ -58,7 +58,7 @@ describe('store reducer', () => {
 
 describe('effectChips', () => {
   it('labels references with film titles', () => {
-    const state = parsed(empty, 'като Black Swan');
-    expect(effectChips(state.effects, byId)[0]).toMatchObject({ group: 'Прилича на', label: 'Black Swan' });
+    const state = parsed(empty, 'like Black Swan');
+    expect(effectChips(state.effects, byId)[0]).toMatchObject({ group: 'Like', label: 'Black Swan' });
   });
 });

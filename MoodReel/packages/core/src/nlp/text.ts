@@ -28,7 +28,7 @@ export interface Token {
   punct: boolean;
 }
 
-const TOKEN_RE = /[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*|[,.!?;:]/gu;
+const TOKEN_RE = /[\p{L}\p{N}]+(?:['-][\p{L}\p{N}]+)*|[,.!?;:]/gu;
 
 export function tokenize(normalized: string): Token[] {
   const tokens: Token[] = [];
@@ -78,11 +78,20 @@ export function dice(a: string, b: string): number {
   return (2 * overlap) / total;
 }
 
+const CYRILLIC = /[\u0400-\u04ff]/;
+
 /**
- * A crude Bulgarian stemmer: drop the definite article and the commonest
- * plural/adjective endings. Good enough to match "динозаври" with "динозаврите".
+ * Crude stemmers, good enough to match "sharks" with "shark" or "динозаври" with
+ * "динозаврите": drop plurals, -ing/-ed and the Bulgarian definite article.
  */
 export function stem(word: string): string {
+  if (!CYRILLIC.test(word)) {
+    if (word.length > 5 && word.endsWith('ies')) return `${word.slice(0, -3)}y`;
+    if (word.length > 6 && word.endsWith('ing')) return word.slice(0, -3);
+    if (word.length > 5 && word.endsWith('ed')) return word.slice(0, -2);
+    if (word.length > 4 && word.endsWith('s') && !word.endsWith('ss')) return word.slice(0, -1);
+    return word;
+  }
   const endings = ['ията', 'ите', 'ата', 'ото', 'ът', 'ят', 'та', 'то', 'те', 'ове', 'еве', 'ия', 'и', 'а', 'о', 'е', 'я', 'ъ'];
   for (const ending of endings) {
     if (word.length - ending.length >= 4 && word.endsWith(ending)) return word.slice(0, -ending.length);

@@ -35,7 +35,7 @@ const limiter = (limit: number) =>
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     handler: (_req, res) => {
-      res.status(429).json({ error: 'rate_limited', message: 'Твърде много заявки. Поеми си дъх и опитай след минута.' });
+      res.status(429).json({ error: 'rate_limited', message: 'Too many requests. Take a breath and try again in a minute.' });
     },
   });
 
@@ -65,7 +65,7 @@ export function createApiRouter(deps: ApiDeps): Router {
 
   router.get('/movies/:id', (req, res) => {
     const movie = byId.get(req.params.id);
-    if (!movie) throw new HttpError(404, 'movie_not_found', 'Няма такъв филм в каталога.');
+    if (!movie) throw new HttpError(404, 'movie_not_found', 'That film is not in the catalog.');
     res.set('Cache-Control', 'public, max-age=300');
     const body: MovieDetails = { movie, similar: similarMovies(movie, deps.summaries, 6).map((s) => ({ movie: s.ref, similarity: Math.round(s.similarity * 100) })) };
     res.json(body);
@@ -86,7 +86,7 @@ export function createApiRouter(deps: ApiDeps): Router {
     const { results, pool } = recommend(deps.summaries, query, { limit: 8, community: signals(), seed });
     const rng = createRng(seed);
     const pick = pickOne(results, rng, temperature ? { temperature } : {});
-    if (!pick) throw new HttpError(404, 'nothing_left', 'Условията изключиха всички филми. Махни някое ограничение.');
+    if (!pick) throw new HttpError(404, 'nothing_left', 'Your rules filtered out every film. Remove one and try again.');
     const remaining = deps.summaries.filter((m) => !pool.excluded[m.id]);
     const body: PickResult = {
       pick,
@@ -100,13 +100,13 @@ export function createApiRouter(deps: ApiDeps): Router {
   router.post('/oracle', limiter(perMinute), (req, res) => {
     const { history, query } = oracleRequest.parse(req.body);
     const pool = query ? deps.summaries.filter((m) => !exclusionReason(m, query)) : deps.summaries;
-    if (pool.length === 0) throw new HttpError(404, 'nothing_left', 'Условията изключиха всички филми. Махни някое ограничение.');
+    if (pool.length === 0) throw new HttpError(404, 'nothing_left', 'Your rules filtered out every film. Remove one and try again.');
     res.json(runOracle(pool, history));
   });
 
   router.post('/feedback', limiter(Math.max(10, Math.round(perMinute / 4))), async (req, res) => {
     const { clientId, movieId, verdict, mood } = feedbackRequest.parse(req.body);
-    if (!byId.has(movieId)) throw new HttpError(404, 'movie_not_found', 'Няма такъв филм в каталога.');
+    if (!byId.has(movieId)) throw new HttpError(404, 'movie_not_found', 'That film is not in the catalog.');
     const accepted = await deps.store.add({ clientId, movieId, verdict, at: Date.now(), ...(mood ? { mood } : {}) });
     res.status(accepted ? 201 : 200).json({ accepted });
   });

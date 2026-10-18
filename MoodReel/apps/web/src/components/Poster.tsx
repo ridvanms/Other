@@ -140,7 +140,7 @@ export const Poster = memo(function Poster({ movie, size = 'md', decorative = tr
       style={{ '--poster-bg': bg, '--poster-a': a, '--poster-b': b, '--poster-ink': ink } as CSSProperties}
       role={decorative ? undefined : 'img'}
       aria-hidden={decorative || undefined}
-      aria-label={decorative ? undefined : `Плакат: ${movie.title}`}
+      aria-label={decorative ? undefined : `Poster: ${movie.title}`}
     >
       <svg className="poster__art" viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         {motif}

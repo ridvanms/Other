@@ -2,7 +2,7 @@
   "name": "@moodreel/core",
   "version": "1.0.0",
   "private": true,
-  "description": "Изоморфно ядро на MoodReel: каталог, NLP парсер, препоръчващ двигател и оракул.",
+  "description": "Isomorphic core of MoodReel: catalog, natural-language parser, recommender and oracle.",
   "type": "module",
   "sideEffects": false,
   "exports": {

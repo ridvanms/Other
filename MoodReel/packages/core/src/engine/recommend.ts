@@ -141,20 +141,20 @@ function dimReason(d: DimFit): Reason {
   const label = `${meta.label} ${v}/10`;
   const aboveMax = c.max !== undefined && v > c.max;
   const belowMin = c.min !== undefined && v < c.min;
-  if (c.target <= 1 && !aboveMax) return { kind: 'dim', dim: d.dim, tone: 'good', text: v === 0 ? `${meta.label}: напълно липсва` : `${label} – почти липсва` };
-  if (aboveMax) return { kind: 'dim', dim: d.dim, tone: 'warn', text: `${label} – малко над желаното` };
-  if (belowMin) return { kind: 'dim', dim: d.dim, tone: 'warn', text: `${label} – по-малко от желаното` };
-  if (d.fit > 0.8) return { kind: 'dim', dim: d.dim, tone: 'good', text: `${label} – точно колкото искаш` };
+  if (c.target <= 1 && !aboveMax) return { kind: 'dim', dim: d.dim, tone: 'good', text: v === 0 ? `${meta.label}: none at all` : `${label} – barely there` };
+  if (aboveMax) return { kind: 'dim', dim: d.dim, tone: 'warn', text: `${label} – a bit more than you wanted` };
+  if (belowMin) return { kind: 'dim', dim: d.dim, tone: 'warn', text: `${label} – less than you wanted` };
+  if (d.fit > 0.8) return { kind: 'dim', dim: d.dim, tone: 'good', text: `${label} – just what you asked for` };
   return { kind: 'dim', dim: d.dim, tone: 'neutral', text: label };
 }
 
 const DEAL_REASON: Array<[keyof MoodQuery['dealbreakers'], string]> = [
-  ['happyOnly', 'щастлив край'],
-  ['noSadEnding', 'без тъжен край'],
-  ['noGore', 'без кръв'],
-  ['noJumpscares', 'без стряскания'],
-  ['noAnimalDeath', 'животните са добре'],
-  ['familyFriendly', 'за всички възрасти'],
+  ['happyOnly', 'happy ending'],
+  ['noSadEnding', 'no sad ending'],
+  ['noGore', 'no gore'],
+  ['noJumpscares', 'no jump scares'],
+  ['noAnimalDeath', 'the animals are fine'],
+  ['familyFriendly', 'fine for all ages'],
 ];
 
 function buildReasons(s: Scored, query: MoodQuery, community?: CommunitySignal): Reason[] {
@@ -162,10 +162,10 @@ function buildReasons(s: Scored, query: MoodQuery, community?: CommunitySignal):
 
   if (s.ref?.best) {
     const { ref, similarity } = s.ref.best;
-    reasons.push({ kind: 'like', tone: similarity > 0.6 ? 'good' : 'neutral', text: `${Math.round(similarity * 100)}% сходство с ${ref.title}` });
+    reasons.push({ kind: 'like', tone: similarity > 0.6 ? 'good' : 'neutral', text: `${Math.round(similarity * 100)}% similar to ${ref.title}` });
     const shared = sharedThemes(s.movie, ref).slice(0, 2).map(tagLabel);
-    if (ref.director === s.movie.director) reasons.push({ kind: 'like', tone: 'good', text: `Същият режисьор като ${ref.title}` });
-    else if (shared.length) reasons.push({ kind: 'like', tone: 'neutral', text: `Общо с ${ref.title}: ${shared.join(', ')}` });
+    if (ref.director === s.movie.director) reasons.push({ kind: 'like', tone: 'good', text: `Same director as ${ref.title}` });
+    else if (shared.length) reasons.push({ kind: 'like', tone: 'neutral', text: `Shares with ${ref.title}: ${shared.join(', ')}` });
   }
 
   const dimReasons = s.dims
@@ -177,15 +177,15 @@ function buildReasons(s: Scored, query: MoodQuery, community?: CommunitySignal):
 
   if (s.genreHit) {
     const hits = query.genres.include.filter((g) => s.movie.genres.includes(g)).map((g) => GENRE_LABEL[g]);
-    reasons.push({ kind: 'genre', tone: 'good', text: `Жанр: ${hits.join(', ')}` });
+    reasons.push({ kind: 'genre', tone: 'good', text: `Genre: ${hits.join(', ')}` });
   }
-  if (s.tagHits.length) reasons.push({ kind: 'genre', tone: 'good', text: `Тема: ${s.tagHits.map(tagLabel).join(', ')}` });
-  if (s.keywordHit) reasons.push({ kind: 'genre', tone: 'good', text: 'Съвпада с търсенето ти' });
+  if (s.tagHits.length) reasons.push({ kind: 'genre', tone: 'good', text: `Theme: ${s.tagHits.map(tagLabel).join(', ')}` });
+  if (s.keywordHit) reasons.push({ kind: 'genre', tone: 'good', text: 'Matches your search' });
 
   const deals = DEAL_REASON.filter(([key]) => query.dealbreakers[key]).map(([, text]) => text);
   if (deals.length) reasons.push({ kind: 'dealbreaker', tone: 'good', text: `✓ ${deals.join(', ')}` });
 
-  if (community && community.picks >= 2) reasons.push({ kind: 'community', tone: 'neutral', text: `Избран ${community.picks}× от други зрители` });
+  if (community && community.picks >= 2) reasons.push({ kind: 'community', tone: 'neutral', text: `Picked ${community.picks}× by other viewers` });
   return reasons;
 }
 
@@ -266,5 +266,5 @@ export function describePool(pool: PoolReport): string {
     .filter(([reason]) => reason !== 'reference')
     .sort((a, b) => b[1] - a[1])
     .map(([reason, count]) => `${count} – ${EXCLUSION_LABEL[reason]}`);
-  return parts.length ? `Изключени: ${parts.join(' · ')}` : 'Нищо не е изключено';
+  return parts.length ? `Excluded: ${parts.join(' · ')}` : 'Nothing excluded';
 }

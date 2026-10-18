@@ -9,11 +9,11 @@ import { Poster } from './Poster';
 import './Oracle.css';
 
 const ANSWERS: Array<{ id: OracleAnswer; label: string }> = [
-  { id: 'yes', label: 'Да' },
-  { id: 'probably', label: 'По-скоро да' },
-  { id: 'unknown', label: 'Все ми е едно' },
-  { id: 'probablyNot', label: 'По-скоро не' },
-  { id: 'no', label: 'Не' },
+  { id: 'yes', label: 'Yes' },
+  { id: 'probably', label: 'Probably' },
+  { id: 'unknown', label: 'Don’t care' },
+  { id: 'probablyNot', label: 'Probably not' },
+  { id: 'no', label: 'No' },
 ];
 
 export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
@@ -60,14 +60,14 @@ export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
     <section className="oracle" aria-labelledby="oracle-title">
       <header className="oracle__head">
         <div>
-          <p className="eyebrow">Оракулът</p>
-          <h2 id="oracle-title">Не знаеш какво искаш? Отговори на няколко въпроса.</h2>
-          <p className="oracle__lead">Всеки следващ въпрос е този, който най-добре разделя оставащите филми. Обикновено стигат 5–8.</p>
+          <p className="eyebrow">The Oracle</p>
+          <h2 id="oracle-title">Not sure what you want? Answer a few questions.</h2>
+          <p className="oracle__lead">Each next question is the one that best splits the films still left. Five to eight usually do it.</p>
         </div>
         {hasRules && (
           <label className="oracle__rules">
             <input type="checkbox" checked={respectRules} onChange={(e) => setRespectRules(e.target.checked)} />
-            Спазвай условията ми ({Object.keys(query.dealbreakers).length + (query.exclude.length ? 1 : 0)})
+            Respect my rules ({Object.keys(query.dealbreakers).length + (query.exclude.length ? 1 : 0)})
           </label>
         )}
       </header>
@@ -90,7 +90,7 @@ export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
-                <p className="mono oracle__number">Въпрос {String(state.question.number).padStart(2, '0')}</p>
+                <p className="mono oracle__number">Question {String(state.question.number).padStart(2, '0')}</p>
                 <h3 className="oracle__question" aria-live="polite">
                   {state.question.text}
                 </h3>
@@ -104,16 +104,16 @@ export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
                 </div>
                 {history.length > 0 && (
                   <button type="button" className="btn btn--ghost btn--small" onClick={() => setHistory((h) => h.slice(0, -1))}>
-                    ← Върни последния отговор
+                    ← Undo last answer
                   </button>
                 )}
               </motion.div>
             )}
             {state?.done && leader && (
               <motion.div key="verdict" className="oracle__verdict" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}>
-                <p className="eyebrow">След {state.asked} въпроса мисля, че ти трябва…</p>
+                <p className="eyebrow">After {state.asked} questions, I think you need…</p>
                 <div className="oracle__winner">
-                  <button type="button" className="oracle__winner-poster" onClick={() => onOpen(leader.movie.id)} aria-label={`Детайли за ${leader.movie.title}`}>
+                  <button type="button" className="oracle__winner-poster" onClick={() => onOpen(leader.movie.id)} aria-label={`Details for ${leader.movie.title}`}>
                     <Poster movie={leader.movie} size="lg" />
                   </button>
                   <div className="oracle__winner-info">
@@ -124,7 +124,7 @@ export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
                     <p>{leader.movie.blurb}</p>
                     <div className="oracle__winner-actions">
                       {accepted ? (
-                        <p className="oracle__thanks">Запазено в списъка ти. Приятно гледане!</p>
+                        <p className="oracle__thanks">Saved to your list. Enjoy the film!</p>
                       ) : (
                         <button
                           type="button"
@@ -135,11 +135,11 @@ export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
                             setAccepted(true);
                           }}
                         >
-                          <Icon name="check" size={16} /> Гледам го!
+                          <Icon name="check" size={16} /> I’ll watch it!
                         </button>
                       )}
                       <button type="button" className="btn" onClick={restart}>
-                        Започни отначало
+                        Start over
                       </button>
                     </div>
                   </div>
@@ -149,11 +149,11 @@ export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
           </AnimatePresence>
         </div>
 
-        <aside className="oracle__mind" aria-label="Какво си мисли Оракулът">
-          <p className="eyebrow">В мислите на Оракула</p>
+        <aside className="oracle__mind" aria-label="What the Oracle is thinking">
+          <p className="eyebrow">Inside the Oracle’s head</p>
           <p className="oracle__count">
             <span className="oracle__count-value">≈{state?.effectiveCandidates ?? '…'}</span>
-            <span className="oracle__count-label">филма все още са в играта</span>
+            <span className="oracle__count-label">films still in the running</span>
           </p>
           <ol className="oracle__top" style={{ filter: state?.done ? 'none' : `blur(${(1 - clarity) * 5}px)` }} aria-hidden={!state?.done}>
             {top.map((c) => (
@@ -167,7 +167,7 @@ export function Oracle({ onOpen }: { onOpen: (id: string) => void }) {
               </li>
             ))}
           </ol>
-          {!state?.done && <p className="oracle__note">Отговорите избистрят картината. Имената се изясняват, когато Оракулът е по-сигурен.</p>}
+          {!state?.done && <p className="oracle__note">Your answers sharpen the picture. Titles come into focus as the Oracle grows surer.</p>}
         </aside>
       </div>
     </section>

@@ -108,16 +108,16 @@ export function PickFlow({ open, onClose }: { open: boolean; onClose: () => void
   const seat = movie ? hash(movie.id + (result?.seed ?? 0)) : 0;
 
   return (
-    <div className="pick" role="dialog" aria-modal="true" aria-label="Изборът на вечерта" ref={dialog}>
+    <div className="pick" role="dialog" aria-modal="true" aria-label="Tonight’s pick" ref={dialog}>
       <div className="pick__backdrop" onClick={onClose} />
       <div className="pick__stage">
-        <button type="button" className="btn btn--icon btn--ghost pick__close" onClick={onClose} aria-label="Затвори">
+        <button type="button" className="btn btn--icon btn--ghost pick__close" onClick={onClose} aria-label="Close">
           <Icon name="close" />
         </button>
 
         {(phase === 'loading' || phase === 'spinning') && (
           <div className="reel" aria-live="polite">
-            <p className="eyebrow reel__label">{phase === 'loading' ? 'Зареждам лентата…' : 'Лентата се върти…'}</p>
+            <p className="eyebrow reel__label">{phase === 'loading' ? 'Loading the reel…' : 'The reel is spinning…'}</p>
             <div className="reel__viewport" ref={viewport}>
               <div className="reel__gate" aria-hidden="true" />
               <div className="reel__strip" ref={strip} style={{ gap: GAP }}>
@@ -133,10 +133,10 @@ export function PickFlow({ open, onClose }: { open: boolean; onClose: () => void
 
         {phase === 'error' && (
           <div className="pick__message">
-            <h2>Няма какво да завъртим</h2>
+            <h2>Nothing left to spin</h2>
             <p>{error}</p>
             <button type="button" className="btn btn--primary" onClick={onClose} data-autofocus>
-              Към условията
+              Back to my rules
             </button>
           </div>
         )}
@@ -144,7 +144,7 @@ export function PickFlow({ open, onClose }: { open: boolean; onClose: () => void
         {(phase === 'ticket' || phase === 'accepted') && movie && result && (
           <article className="ticket" aria-labelledby="ticket-title">
             <div className="ticket__main">
-              <p className="ticket__brand mono">MoodReel · прожекция тази вечер</p>
+              <p className="ticket__brand mono">MoodReel · screening tonight</p>
               <div className="ticket__film">
                 <Poster movie={movie} size="lg" className="ticket__poster" />
                 <div className="ticket__info">
@@ -166,15 +166,15 @@ export function PickFlow({ open, onClose }: { open: boolean; onClose: () => void
               </div>
               {Object.keys(query.dims).length > 0 && <Fingerprint movie={movie} query={query} compact />}
             </div>
-            <div className="ticket__stub mono" aria-label={`Зала ${(seat % 9) + 1}, ред ${(seat % 14) + 1}, място ${(seat % 22) + 1}`}>
+            <div className="ticket__stub mono" aria-label={`Screen ${(seat % 9) + 1}, row ${(seat % 14) + 1}, seat ${(seat % 22) + 1}`}>
               <span>
-                Зала<b>{(seat % 9) + 1}</b>
+                Screen<b>{(seat % 9) + 1}</b>
               </span>
               <span>
-                Ред<b>{(seat % 14) + 1}</b>
+                Row<b>{(seat % 14) + 1}</b>
               </span>
               <span>
-                Място<b>{(seat % 22) + 1}</b>
+                Seat<b>{(seat % 22) + 1}</b>
               </span>
               <span className="ticket__match">
                 {result.pick.score}
@@ -185,18 +185,18 @@ export function PickFlow({ open, onClose }: { open: boolean; onClose: () => void
               {phase === 'ticket' ? (
                 <>
                   <button type="button" className="btn btn--primary" onClick={accept} data-autofocus>
-                    <Icon name="check" size={16} /> Гледам го!
+                    <Icon name="check" size={16} /> I’ll watch it!
                   </button>
                   <button type="button" className="btn" onClick={another}>
-                    <Icon name="shuffle" size={16} /> Друг
+                    <Icon name="shuffle" size={16} /> Another
                   </button>
                   <button type="button" className="btn btn--ghost" onClick={seen}>
-                    <Icon name="eye" size={16} /> Гледал(а) съм го
+                    <Icon name="eye" size={16} /> Seen it
                   </button>
                 </>
               ) : (
                 <>
-                  <p className="ticket__done">Приятно гледане! Запазих го в списъка ти.</p>
+                  <p className="ticket__done">Enjoy the film! I saved it to your list.</p>
                   <a className="btn" href={imdbSearch(movie.title, movie.year)} target="_blank" rel="noreferrer">
                     IMDb <Icon name="external" size={14} />
                   </a>
@@ -204,7 +204,7 @@ export function PickFlow({ open, onClose }: { open: boolean; onClose: () => void
                     Letterboxd <Icon name="external" size={14} />
                   </a>
                   <button type="button" className="btn btn--ghost" onClick={onClose} data-autofocus>
-                    Затвори
+                    Close
                   </button>
                 </>
               )}

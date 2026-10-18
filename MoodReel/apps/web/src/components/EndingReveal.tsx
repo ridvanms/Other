@@ -14,7 +14,7 @@ export function EndingReveal({ ending }: { ending: Ending }) {
           <span className="ending__hint">{ENDING_META[ending].hint}</span>
         </>
       ) : (
-        <span>Какъв е краят?</span>
+        <span>What kind of ending?</span>
       )}
     </button>
   );

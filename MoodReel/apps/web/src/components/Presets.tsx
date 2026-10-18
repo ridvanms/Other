@@ -5,8 +5,8 @@ import { useStore } from '../state/store';
 const PRESETS: Array<{ id: string; label: string; note: string; effects: ParsedEffect[] }> = [
   {
     id: 'friday',
-    label: 'Петък с приятели',
-    note: 'смях, темпо, без драма',
+    label: 'Friday with friends',
+    note: 'laughs, pace, no drama',
     effects: [
       { kind: 'dim', dim: 'humor', constraint: { target: 7.5, tolerance: 1.5 } },
       { kind: 'dim', dim: 'pace', constraint: { target: 7.5, tolerance: 1.5, weight: 0.7 } },
@@ -15,8 +15,8 @@ const PRESETS: Array<{ id: string; label: string; note: string; effects: ParsedE
   },
   {
     id: 'rain',
-    label: 'Дъждовна неделя',
-    note: 'уютно и малко вълшебно',
+    label: 'Rainy Sunday',
+    note: 'cozy and a little magical',
     effects: [
       { kind: 'dim', dim: 'darkness', constraint: { target: 1.5, max: 3.5 } },
       { kind: 'dim', dim: 'tension', constraint: { target: 3, max: 5 } },
@@ -26,8 +26,8 @@ const PRESETS: Array<{ id: string; label: string; note: string; effects: ParsedE
   },
   {
     id: 'date',
-    label: 'Среща',
-    note: 'романтика с усмивка',
+    label: 'Date night',
+    note: 'romance with a smile',
     effects: [
       { kind: 'dim', dim: 'romance', constraint: { target: 7.5, min: 5.5 } },
       { kind: 'dim', dim: 'humor', constraint: { target: 6, tolerance: 2, weight: 0.6 } },
@@ -36,8 +36,8 @@ const PRESETS: Array<{ id: string; label: string; note: string; effects: ParsedE
   },
   {
     id: 'night',
-    label: 'Сам в 2 през нощта',
-    note: 'странно, мрачно, за мислене',
+    label: 'Alone at 2 a.m.',
+    note: 'strange, dark, thoughtful',
     effects: [
       { kind: 'dim', dim: 'mindbend', constraint: { target: 8.5, min: 6.5 } },
       { kind: 'dim', dim: 'darkness', constraint: { target: 7, tolerance: 2 } },
@@ -46,8 +46,8 @@ const PRESETS: Array<{ id: string; label: string; note: string; effects: ParsedE
   },
   {
     id: 'family',
-    label: 'Семейна вечер',
-    note: 'за всички възрасти',
+    label: 'Family night',
+    note: 'for all ages',
     effects: [
       { kind: 'deal', key: 'familyFriendly' },
       { kind: 'dim', dim: 'humor', constraint: { target: 7, tolerance: 2 } },
@@ -56,8 +56,8 @@ const PRESETS: Array<{ id: string; label: string; note: string; effects: ParsedE
   },
   {
     id: 'adrenaline',
-    label: 'Адреналин',
-    note: 'екшън и напрежение',
+    label: 'Adrenaline',
+    note: 'action and tension',
     effects: [
       { kind: 'dim', dim: 'action', constraint: { target: 9, min: 7 } },
       { kind: 'dim', dim: 'pace', constraint: { target: 9, min: 7 } },
